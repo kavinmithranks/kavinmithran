@@ -1,0 +1,685 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - Help & Support</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #0ea5e9;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            color: #0369a1;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        /* Quick Help Grid */
+        .quick-help {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .help-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #0ea5e9;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #0ea5e9;
+        }
+
+        .help-card h3 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .help-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .faq-container {
+            padding: 2rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #475569;
+            margin-top: 1rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .toggle-icon {
+            color: #0ea5e9;
+            font-size: 1.2rem;
+        }
+
+        /* Contact Options */
+        .contact-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .contact-card.email {
+            border-top: 4px solid #10b981;
+        }
+
+        .contact-card.chat {
+            border-top: 4px solid #8b5cf6;
+        }
+
+        .contact-card.community {
+            border-top: 4px solid #f59e0b;
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card.email .contact-icon {
+            color: #10b981;
+        }
+
+        .contact-card.chat .contact-icon {
+            color: #8b5cf6;
+        }
+
+        .contact-card.community .contact-icon {
+            color: #f59e0b;
+        }
+
+        /* Email Link Styles */
+        .email-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .email-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .email-note {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Alternative Email Formats */
+        .email-formats {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .email-formats h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .format-example {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border-left: 3px solid #0ea5e9;
+            word-break: break-all;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .contact-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            ❓ LogiXpress Help
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="orders.html">Orders</a>
+            <a href="shipments.html">Shipments</a>
+            <a href="suppliers.html">Suppliers</a>
+            <a href="reports.html">Reports</a>
+            <a href="settings.html">Settings</a>
+            <a href="help.html" class="active">Help</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>How can we help you today?</h1>
+            <p>Find answers to common questions, troubleshoot issues, or get in touch with our support team for personalized assistance.</p>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-bar" placeholder="Search for help articles, guides, or troubleshooting...">
+            </div>
+        </section>
+
+        <!-- Quick Help Grid -->
+        <div class="quick-help">
+            <div class="help-card">
+                <div class="help-icon">📚</div>
+                <h3>Getting Started</h3>
+                <p>Learn the basics of LogiXpress with our beginner's guide and setup tutorials.</p>
+                <button class="email-link" onclick="location.href='#faq'">View Guide</button>
+            </div>
+            
+            <div class="help-card">
+                <div class="help-icon">⚙️</div>
+                <h3>Troubleshooting</h3>
+                <p>Common issues and solutions for inventory, orders, and shipping problems.</p>
+                <button class="email-link" onclick="location.href='#faq'">Solve Issues</button>
+            </div>
+            
+            <div class="help-card">
+                <div class="help-icon">📈</div>
+                <h3>Best Practices</h3>
+                <p>Optimize your workflow with our expert tips and efficiency guides.</p>
+                <button class="email-link" onclick="location.href='#faq'">Learn More</button>
+            </div>
+            
+            <div class="help-card">
+                <div class="help-icon">🎥</div>
+                <h3>Video Tutorials</h3>
+                <p>Watch step-by-step video guides for all LogiXpress features.</p>
+                <button class="email-link" onclick="location.href='#faq'">Watch Now</button>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(0)">
+                        How do I add new inventory items?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Navigate to the Inventory page and click the "Add New Item" button. Fill in the product details including name, SKU, category, quantity, and price. You can also upload product images and set reorder thresholds.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(1)">
+                        How can I track shipment status?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Go to the Shipments page and locate your shipment using the tracking number or order ID. Click the tracking icon next to the shipment to view real-time updates, estimated delivery, and carrier information.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(2)">
+                        How do I generate custom reports?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Visit the Reports page and select "Custom Report Builder." Choose your report type, date range, and metrics. You can export reports as PDF, Excel, or CSV formats for further analysis.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(3)">
+                        Can I integrate LogiXpress with other systems?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! LogiXpress supports integration with popular e-commerce platforms, accounting software, and shipping carriers. Visit the Settings > Integrations page to configure your connections.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Options -->
+        <section class="contact-section">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+            </div>
+            <div class="contact-options">
+                <!-- Email Support -->
+                <div class="contact-card email">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email Support</h3>
+                    <p>For personalized assistance, reach out directly via email. Our team typically responds within 24 hours.</p>
+                    
+                    <!-- Simple Email Link -->
+                    <a href="mailto:kavinmithranks@gmail.com" class="email-link">
+                        📧 Email Our Support Team
+                    </a>
+                    
+                    <!-- Email Link with Subject -->
+                    <a href="mailto:kavinmithranks@gmail.com?subject=LogiXpress%20Support%20Request&body=Hello%20Support%20Team,%0D%0A%0D%0AI%20need%20help%20with:%0D%0A%0D%0A- [Briefly describe your issue]%0D%0A- [Page/Feature where issue occurs]%0D%0A- [Steps to reproduce]%0D%0A%0D%0AThank you!" class="email-link" style="margin-top: 0.5rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                        📝 Email with Pre-filled Form
+                    </a>
+                    
+                    <p class="email-note">
+                        Clicking these links will open your default email client with our support address already filled in[citation:2][citation:5].
+                    </p>
+                </div>
+
+                <!-- Live Chat -->
+                <div class="contact-card chat">
+                    <div class="contact-icon">💬</div>
+                    <h3>Quick Questions</h3>
+                    <p>For immediate assistance with simple queries, use our live chat feature during business hours.</p>
+                    <button class="email-link" onclick="openChat()" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        💬 Start Live Chat
+                    </button>
+                    <p class="email-note">
+                        Available Monday-Friday, 9AM-6PM EST
+                    </p>
+                </div>
+
+                <!-- Community -->
+                <div class="contact-card community">
+                    <div class="contact-icon">👥</div>
+                    <h3>Community Help</h3>
+                    <p>Connect with other LogiXpress users, share tips, and find solutions in our community forum.</p>
+                    <button class="email-link" onclick="openCommunity()" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        👥 Visit Community
+                    </button>
+                    <p class="email-note">
+                        Share experiences and learn from other users
+                    </p>
+                </div>
+            </div>
+
+            <!-- Email Format Examples -->
+            <div class="email-formats">
+                <h4>📋 Different Email Link Formats You Can Use</h4>
+                
+                <p>You can customize your email links for different purposes[citation:2][citation:10]:</p>
+                
+                <!-- Simple Email Link -->
+                <div class="format-example">
+                    <strong>Simple Email Link:</strong><br>
+                    &lt;a href="mailto:kavinmithranks@gmail.com"&gt;Email Support&lt;/a&gt;
+                </div>
+                
+                <!-- Email with Subject -->
+                <div class="format-example">
+                    <strong>With Pre-filled Subject:</strong><br>
+                    &lt;a href="mailto:kavinmithranks@gmail.com?subject=Support%20Request"&gt;Email Support&lt;/a&gt;
+                </div>
+                
+                <!-- Email with Subject and Body -->
+                <div class="format-example">
+                    <strong>With Subject and Message Body:</strong><br>
+                    &lt;a href="mailto:kavinmithranks@gmail.com?subject=Issue%20Report&body=Hello,%20I%20need%20help%20with..."&gt;Report Issue&lt;/a&gt;
+                </div>
+                
+                <!-- Multiple Recipients -->
+                <div class="format-example">
+                    <strong>Multiple Email Addresses:</strong><br>
+                    &lt;a href="mailto:kavinmithranks@gmail.com,support@logixpress.com"&gt;Email Team&lt;/a&gt;
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2026 LogiXpress Help & Support System. All rights reserved.</p>
+        <p>Need immediate help? Email: <a href="mailto:kavinmithranks@gmail.com" style="color: #0ea5e9; text-decoration: none;">kavinmithranks@gmail.com</a></p>
+    </footer>
+
+    <script>
+        // FAQ Toggle Functionality
+        function toggleFAQ(index) {
+            const answers = document.querySelectorAll('.faq-answer');
+            const icons = document.querySelectorAll('.toggle-icon');
+            
+            // Toggle selected answer
+            answers[index].classList.toggle('show');
+            
+            // Update icon
+            if (answers[index].classList.contains('show')) {
+                icons[index].textContent = '−';
+            } else {
+                icons[index].textContent = '+';
+            }
+        }
+
+        // Search Functionality
+        document.querySelector('.search-bar').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            if (searchTerm.length > 2) {
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        // Highlight matching text
+                        const answerElement = item.querySelector('.faq-answer');
+                        answerElement.innerHTML = answerElement.textContent.replace(
+                            new RegExp(searchTerm, 'gi'),
+                            match => `<span style="background-color: #fef3c7; padding: 2px 4px; border-radius: 3px;">${match}</span>`
+                        );
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            } else {
+                faqItems.forEach(item => {
+                    item.style.display = 'block';
+                    // Reset highlighting
+                    const answerElement = item.querySelector('.faq-answer');
+                    answerElement.innerHTML = answerElement.textContent;
+                });
+            }
+        });
+
+        // Chat Functionality (Demo)
+        function openChat() {
+            alert('Live chat would open here in a real application.\n\nFor now, please use email: kavinmithranks@gmail.com');
+        }
+
+        // Community Functionality (Demo)
+        function openCommunity() {
+            alert('Community forum would open here in a real application.\n\nComing soon!');
+        }
+
+        // Initialize first FAQ as open
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleFAQ(0);
+            
+            // Add some helpful tips about email links
+            console.log('Help page loaded. Email links configured for: kavinmithranks@gmail.com');
+            console.log('Note: Mailto links open the user\'s default email client[citation:2].');
+            console.log('Tip: Use %20 for spaces and %0D%0A for line breaks in email body[citation:10].');
+        });
+
+        // Simulate typing in search bar for demo
+        setTimeout(() => {
+            const searchBar = document.querySelector('.search-bar');
+            const demoTerms = ['inventory', 'shipment', 'report', 'settings'];
+            let termIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            function typeDemo() {
+                const currentTerm = demoTerms[termIndex];
+                
+                if (isDeleting) {
+                    searchBar.value = currentTerm.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    searchBar.value = currentTerm.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+                
+                if (!isDeleting && charIndex === currentTerm.length) {
+                    isDeleting = true;
+                    setTimeout(typeDemo, 1000);
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    termIndex = (termIndex + 1) % demoTerms.length;
+                    setTimeout(typeDemo, 500);
+                } else {
+                    setTimeout(typeDemo, isDeleting ? 50 : 100);
+                }
+                
+                // Trigger input event for search functionality
+                searchBar.dispatchEvent(new Event('input'));
+            }
+            
+            // Start typing demo after 3 seconds
+            setTimeout(typeDemo, 3000);
+        }, 1000);
+    </script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>

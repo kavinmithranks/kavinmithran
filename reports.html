@@ -1,0 +1,1228 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - Analytics & Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #7c3aed;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Section */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Date Range Picker */
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .date-input {
+            padding: 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: #7c3aed;
+            color: #7c3aed;
+        }
+
+        /* Report Categories */
+        .report-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: #7c3aed;
+        }
+
+        .category-card.active {
+            border-color: #7c3aed;
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card h3 {
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* KPIs Section */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid;
+        }
+
+        .kpi-card.sales { border-color: #10b981; }
+        .kpi-card.inventory { border-color: #3b82f6; }
+        .kpi-card.shipping { border-color: #f59e0b; }
+        .kpi-card.customers { border-color: #8b5cf6; }
+
+        .kpi-card h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .kpi-card .trend {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .trend.up { color: #10b981; }
+        .trend.down { color: #ef4444; }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1100px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-header h3 {
+            color: #1e293b;
+            font-size: 1.2rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #f8fafc, #f1f5f9);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Report Tables */
+        .report-tables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .report-tables {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            color: #1e293b;
+            font-size: 1.2rem;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table thead {
+            background-color: #f8fafc;
+        }
+
+        .report-table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .report-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .report-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Export Options */
+        .export-options {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .export-options h3 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #334155;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            border-color: #7c3aed;
+            color: #7c3aed;
+        }
+
+        /* Scheduled Reports */
+        .scheduled-reports {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .schedule-header h3 {
+            color: #1e293b;
+        }
+
+        .schedule-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        /* Insights Section */
+        .insights-section {
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .insights-section h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .insight-card h4 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
+
+            .date-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-tables {
+                grid-template-columns: 1fr;
+            }
+
+            .export-buttons {
+                flex-direction: column;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-card {
+                padding: 1rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .progress-fill.high { background: #10b981; }
+        .progress-fill.medium { background: #f59e0b; }
+        .progress-fill.low { background: #ef4444; }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.on-track { background: #10b981; }
+        .status-dot.at-risk { background: #f59e0b; }
+        .status-dot.off-track { background: #ef4444; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .tab.active {
+            background: #7c3aed;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            📊 LogiXpress Analytics
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="orders.html">Orders</a>
+            <a href="shipments.html">Shipments</a>
+            <a href="suppliers.html">Suppliers</a>
+            <a href="reports.html" class="active">Reports</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Analytics & Reports Dashboard</h1>
+            <div class="header-actions">
+                <div class="date-range">
+                    <span>Date Range:</span>
+                    <input type="date" class="date-input" id="startDate" value="2026-01-01">
+                    <span>to</span>
+                    <input type="date" class="date-input" id="endDate" value="2026-02-03">
+                </div>
+                <button class="btn-primary" onclick="generateReport()">
+                    📊 Generate Report
+                </button>
+                <button class="btn-secondary">
+                    ⚙️ Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Report Categories -->
+        <div class="report-categories">
+            <div class="category-card active" onclick="showReport('overview')">
+                <div class="category-icon">📈</div>
+                <h3>Overview</h3>
+                <p>Executive summary & KPIs</p>
+            </div>
+            <div class="category-card" onclick="showReport('sales')">
+                <div class="category-icon">💰</div>
+                <h3>Sales Analytics</h3>
+                <p>Revenue, orders, trends</p>
+            </div>
+            <div class="category-card" onclick="showReport('inventory')">
+                <div class="category-icon">📦</div>
+                <h3>Inventory Reports</h3>
+                <p>Stock levels, turnover</p>
+            </div>
+            <div class="category-card" onclick="showReport('shipping')">
+                <div class="category-icon">🚚</div>
+                <h3>Shipping Analytics</h3>
+                <p>Delivery performance</p>
+            </div>
+            <div class="category-card" onclick="showReport('suppliers')">
+                <div class="category-icon">🏭</div>
+                <h3>Supplier Performance</h3>
+                <p>Vendor metrics</p>
+            </div>
+            <div class="category-card" onclick="showReport('custom')">
+                <div class="category-icon">🛠️</div>
+                <h3>Custom Reports</h3>
+                <p>Build your own</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('summary')">Summary</button>
+            <button class="tab" onclick="showTab('charts')">Charts</button>
+            <button class="tab" onclick="showTab('tables')">Data Tables</button>
+            <button class="tab" onclick="showTab('export')">Export</button>
+        </div>
+
+        <!-- Summary Content -->
+        <div id="summaryTab" class="tab-content">
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card sales">
+                    <h3>Total Revenue</h3>
+                    <div class="value">$1,247,850</div>
+                    <div class="trend up">↑ 12.5% vs last period</div>
+                </div>
+                <div class="kpi-card inventory">
+                    <h3>Inventory Value</h3>
+                    <div class="value">$584,230</div>
+                    <div class="trend up">↑ 8.3% turnover rate</div>
+                </div>
+                <div class="kpi-card shipping">
+                    <h3>On-Time Delivery</h3>
+                    <div class="value">94.7%</div>
+                    <div class="trend up">↑ 2.1% improvement</div>
+                </div>
+                <div class="kpi-card customers">
+                    <h3>Active Customers</h3>
+                    <div class="value">2,148</div>
+                    <div class="trend up">↑ 156 new this month</div>
+                </div>
+            </div>
+
+            <!-- Insights -->
+            <div class="insights-section">
+                <h2>📈 Key Insights & Recommendations</h2>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h4>🚀 Top Performing Category</h4>
+                        <p>Electronics sales increased by 34% this month, contributing to 42% of total revenue.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill high" style="width: 65%"></div>
+                        </div>
+                        <div class="status-indicator">
+                            <span class="status-dot on-track"></span>
+                            <span>Above target</span>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <h4>⚠️ Shipping Delays Alert</h4>
+                        <p>7% of shipments experienced delays, primarily affecting the Northeast region.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill medium" style="width: 30%"></div>
+                        </div>
+                        <div class="status-indicator">
+                            <span class="status-dot at-risk"></span>
+                            <span>Needs attention</span>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <h4>📦 Low Stock Alert</h4>
+                        <p>12 products are below minimum stock levels, risking $45K in potential lost sales.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill low" style="width: 20%"></div>
+                        </div>
+                        <div class="status-indicator">
+                            <span class="status-dot off-track"></span>
+                            <span>Action required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Content -->
+        <div id="chartsTab" class="tab-content" style="display: none;">
+            <div class="charts-grid">
+                <!-- Revenue Trend -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Revenue Trend (Last 12 Months)</h3>
+                        <select class="filter-select">
+                            <option>Monthly</option>
+                            <option>Quarterly</option>
+                            <option>Yearly</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            Revenue Trend Chart - $1.2M average monthly revenue
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Sales by Product Category</h3>
+                        <select class="filter-select">
+                            <option>Current Month</option>
+                            <option>Last Month</option>
+                            <option>Quarter-to-Date</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            Pie Chart - Electronics: 42%, Clothing: 28%, Home Goods: 18%, Others: 12%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Performance -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>On-Time Delivery Rate</h3>
+                        <select class="filter-select">
+                            <option>By Carrier</option>
+                            <option>By Region</option>
+                            <option>By Service Level</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            Bar Chart - FedEx: 96%, UPS: 94%, DHL: 92%, USPS: 90%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Turnover -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Inventory Turnover Ratio</h3>
+                        <select class="filter-select">
+                            <option>By Category</option>
+                            <option>By Location</option>
+                            <option>By Supplier</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            Line Chart - Average turnover: 8.3, Target: 10.0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Content -->
+        <div id="tablesTab" class="tab-content" style="display: none;">
+            <div class="report-tables">
+                <!-- Top Products -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Top 10 Products by Revenue</h3>
+                        <button class="btn-secondary">View All</button>
+                    </div>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Units Sold</th>
+                                <th>Revenue</th>
+                                <th>Growth</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Laptop Pro X1</td>
+                                <td>Electronics</td>
+                                <td>1,247</td>
+                                <td>$1,245,800</td>
+                                <td style="color: #10b981;">+34%</td>
+                            </tr>
+                            <tr>
+                                <td>Smart Watch Series 5</td>
+                                <td>Electronics</td>
+                                <td>2,589</td>
+                                <td>$987,420</td>
+                                <td style="color: #10b981;">+28%</td>
+                            </tr>
+                            <tr>
+                                <td>Premium T-Shirt Pack</td>
+                                <td>Clothing</td>
+                                <td>4,123</td>
+                                <td>$123,690</td>
+                                <td style="color: #10b981;">+15%</td>
+                            </tr>
+                            <tr>
+                                <td>Wireless Headphones</td>
+                                <td>Electronics</td>
+                                <td>1,856</td>
+                                <td>$556,800</td>
+                                <td style="color: #10b981;">+22%</td>
+                            </tr>
+                            <tr>
+                                <td>Home Coffee Maker</td>
+                                <td>Home Goods</td>
+                                <td>987</td>
+                                <td>$197,400</td>
+                                <td style="color: #ef4444;">-5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Supplier Performance -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Supplier Performance Metrics</h3>
+                        <button class="btn-secondary">View All</button>
+                    </div>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>On-Time %</th>
+                                <th>Quality Score</th>
+                                <th>Cost Efficiency</th>
+                                <th>Overall Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TechGear Solutions</td>
+                                <td>98%</td>
+                                <td>4.9/5</td>
+                                <td>High</td>
+                                <td>⭐ 4.8</td>
+                            </tr>
+                            <tr>
+                                <td>FashionTrend Apparel</td>
+                                <td>92%</td>
+                                <td>4.5/5</td>
+                                <td>Medium</td>
+                                <td>⭐ 4.2</td>
+                            </tr>
+                            <tr>
+                                <td>HomeComfort Goods</td>
+                                <td>95%</td>
+                                <td>4.2/5</td>
+                                <td>High</td>
+                                <td>⭐ 4.3</td>
+                            </tr>
+                            <tr>
+                                <td>RawMaterials Corp</td>
+                                <td>85%</td>
+                                <td>3.8/5</td>
+                                <td>Low</td>
+                                <td>⭐ 3.5</td>
+                            </tr>
+                            <tr>
+                                <td>BookHaven Publishers</td>
+                                <td>96%</td>
+                                <td>4.8/5</td>
+                                <td>Medium</td>
+                                <td>⭐ 4.6</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Content -->
+        <div id="exportTab" class="tab-content" style="display: none;">
+            <!-- Export Options -->
+            <div class="export-options">
+                <h3>Export Report Data</h3>
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportReport('pdf')">
+                        📄 PDF Report
+                    </button>
+                    <button class="export-btn" onclick="exportReport('excel')">
+                        📊 Excel Spreadsheet
+                    </button>
+                    <button class="export-btn" onclick="exportReport('csv')">
+                        📈 CSV Data
+                    </button>
+                    <button class="export-btn" onclick="exportReport('print')">
+                        🖨️ Print Report
+                    </button>
+                    <button class="export-btn" onclick="exportReport('share')">
+                        🔗 Share Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scheduled Reports -->
+            <div class="scheduled-reports">
+                <div class="schedule-header">
+                    <h3>Scheduled Reports</h3>
+                    <button class="btn-primary" onclick="scheduleReport()">
+                        + New Schedule
+                    </button>
+                </div>
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <div>
+                            <strong>Weekly Sales Report</strong>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                Sent every Monday at 9:00 AM to executives@company.com
+                            </div>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <strong>Monthly Inventory Report</strong>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                Sent on 1st of each month to warehouse@company.com
+                            </div>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <strong>Quarterly Supplier Performance</strong>
+                            <div style="font-size: 0.9rem; color: #64748b;">
+                                Sent quarterly to procurement@company.com
+                            </div>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Report Builder -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Custom Report Builder</h3>
+                </div>
+                <div class="chart-container" style="height: auto; padding: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Report Type</label>
+                            <select class="filter-select" style="width: 100%;">
+                                <option>Sales Analysis</option>
+                                <option>Inventory Report</option>
+                                <option>Shipping Performance</option>
+                                <option>Supplier Evaluation</option>
+                                <option>Customer Analysis</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Time Period</label>
+                            <select class="filter-select" style="width: 100%;">
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                                <option>Last Quarter</option>
+                                <option>Last Year</option>
+                                <option>Custom Range</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Format</label>
+                            <select class="filter-select" style="width: 100%;">
+                                <option>Chart + Table</option>
+                                <option>Chart Only</option>
+                                <option>Table Only</option>
+                                <option>Summary Report</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn-primary" onclick="previewReport()">
+                            👁️ Preview Report
+                        </button>
+                        <button class="btn-secondary">
+                            💾 Save Template
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 LogiXpress Analytics & Reporting System. All rights reserved.</p>
+        <p>Version 3.2.0 | Last updated: February 2026 | Data refreshes every 15 minutes</p>
+    </footer>
+
+    <script>
+        // Tab Navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Report Category Navigation
+        function showReport(reportType) {
+            // Update active category
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.category-card').classList.add('active');
+            
+            // Show appropriate content based on report type
+            const reportTitles = {
+                'overview': 'Analytics & Reports Dashboard',
+                'sales': 'Sales Analytics',
+                'inventory': 'Inventory Reports',
+                'shipping': 'Shipping Analytics',
+                'suppliers': 'Supplier Performance',
+                'custom': 'Custom Report Builder'
+            };
+            
+            document.querySelector('.page-title').textContent = reportTitles[reportType];
+            
+            // In a real application, you would load different data based on report type
+            console.log(`Loading ${reportType} report...`);
+        }
+
+        // Generate Report
+        function generateReport() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Start date cannot be after end date.');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '⏳ Generating...';
+            event.target.disabled = true;
+            
+            // Simulate report generation
+            setTimeout(() => {
+                event.target.innerHTML = originalText;
+                event.target.disabled = false;
+                
+                // Show success message
+                alert(`Report generated successfully for period: ${startDate} to ${endDate}\n\nData includes:\n- Revenue: $1.24M\n- Orders: 1,247\n- Shipments: 1,189\n- Inventory Value: $584K`);
+                
+                // Update charts with new data
+                updateCharts();
+            }, 1500);
+        }
+
+        // Update Charts (Mock function)
+        function updateCharts() {
+            console.log('Updating charts with new data...');
+            // In a real application, this would fetch new data and update charts
+        }
+
+        // Export Report
+        function exportReport(format) {
+            const formats = {
+                'pdf': 'PDF Document',
+                'excel': 'Excel Spreadsheet',
+                'csv': 'CSV File',
+                'print': 'Printed Report',
+                'share': 'Shared Dashboard Link'
+            };
+            
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            alert(`Exporting ${formats[format]} for period ${startDate} to ${endDate}\n\nIn a real application, this would download the file or open the sharing dialog.`);
+            
+            // Simulate download for demo
+            if (format !== 'share' && format !== 'print') {
+                const link = document.createElement('a');
+                link.download = `LogiXpress_Report_${startDate}_to_${endDate}.${format}`;
+                link.href = '#';
+                link.click();
+            }
+        }
+
+        // Schedule Report
+        function scheduleReport() {
+            alert('Opening report scheduler...\n\nIn a real application, this would open a modal for scheduling automated reports.');
+        }
+
+        // Preview Report
+        function previewReport() {
+            alert('Generating preview of custom report...\n\nIn a real application, this would generate a preview based on selected parameters.');
+        }
+
+        // Initialize with today's date as end date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            // Format dates as YYYY-MM-DD
+            const formatDate = (date) => {
+                return date.toISOString().split('T')[0];
+            };
+            
+            document.getElementById('startDate').value = formatDate(firstDayOfMonth);
+            document.getElementById('endDate').value = formatDate(today);
+            
+            // Add sample data loading
+            console.log('Reports page loaded. Ready for analytics.');
+        });
+
+        // Simulate data updates every 30 seconds (for demo purposes)
+        setInterval(() => {
+            // Update some random metrics to simulate live data
+            const kpis = document.querySelectorAll('.kpi-card .value');
+            if (kpis.length > 0) {
+                // Random small fluctuations
+                const fluctuation = Math.random() * 0.02 - 0.01; // -1% to +1%
+                const currentValue = parseFloat(kpis[0].textContent.replace(/[^0-9.]/g, ''));
+                const newValue = currentValue * (1 + fluctuation);
+                kpis[0].textContent = '$' + newValue.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            }
+        }, 30000);
+    </script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>
