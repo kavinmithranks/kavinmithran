@@ -1,0 +1,1978 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - Warehousing & Logistics Solutions</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Chart.js for Dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --secondary-blue: #3498db;
+            --accent-orange: #e67e22;
+            --light-orange: #f39c12;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--primary-blue) !important;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .navbar-brand {
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--accent-orange);
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-orange) !important;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 0 6rem;
+            margin-top: 76px;
+        }
+        
+        .hero-section h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-orange);
+            border-color: var(--accent-orange);
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--light-orange);
+            border-color: var(--light-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline-light {
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Section Styling */
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-padding {
+            padding: 5rem 0;
+        }
+        
+        /* Features & Services */
+        .feature-card, .service-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            height: 100%;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--secondary-blue);
+        }
+        
+        .feature-card:hover, .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon, .service-icon {
+            font-size: 3rem;
+            color: var(--accent-orange);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Why Choose Us */
+        .why-us {
+            background-color: var(--light-gray);
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+        
+        .benefit-icon {
+            color: var(--accent-orange);
+            font-size: 1.8rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        /* Dashboard */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 76px);
+            margin-top: 76px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+            transition: var(--transition);
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-orange);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            background-color: #f5f7fa;
+            min-height: calc(100vh - 76px);
+        }
+        
+        .stats-card {
+            border-radius: 10px;
+            padding: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-card-1 {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+        }
+        
+        .stats-card-2 {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+        }
+        
+        .stats-card-3 {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .stats-card-4 {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 0.25rem rgba(230, 126, 34, 0.25);
+        }
+        
+        .contact-info {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            height: 100%;
+        }
+        
+        .contact-info i {
+            color: var(--accent-orange);
+            margin-right: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer h5 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+            margin-right: 10px;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent-orange);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Page Transitions */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Inventory Page Styles */
+        .inventory-container {
+            margin-top: 76px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 76px);
+            background-color: #f5f7fa;
+        }
+        
+        .inventory-actions {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .inventory-table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+        
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .inventory-table th {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .inventory-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .inventory-table tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .stock-low {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .stock-medium {
+            color: #f39c12;
+            font-weight: 600;
+        }
+        
+        .stock-high {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .status-inactive {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .inventory-filters {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .inventory-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--secondary-blue);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--accent-orange);
+            margin-bottom: 1rem;
+        }
+        
+        .inventory-chart {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 1.5rem;
+        }
+        
+        .modal-title {
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-section h1 {
+                font-size: 2.8rem;
+            }
+            
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+            }
+            
+            .inventory-stats {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 6rem 0 4rem;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-padding {
+                padding: 3rem 0;
+            }
+            
+            .sidebar {
+                width: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            
+            .sidebar.active {
+                width: 250px;
+                padding: 2rem 1rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-toggle {
+                display: block !important;
+            }
+            
+            .inventory-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" data-page="home">Logi<span>Xpress</span></a>
+            
+            <button class="mobile-menu-toggle" type="button" id="mobileMenuToggle">
+                <i class="bi bi-list"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-page="home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="inventory">Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1>Streamline Your Warehouse & Logistics Operations</h1>
+                        <p class="lead">LogiXpress provides comprehensive warehouse management and logistics solutions to optimize your supply chain, reduce costs, and improve efficiency.</p>
+                        <div class="mt-4">
+                            <a href="#" class="btn btn-primary me-3" data-page="dashboard">Get Started</a>
+                            <a href="#" class="btn btn-outline-light" data-page="contact">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Introduction -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h2 class="section-title">About LogiXpress</h2>
+                        <p>LogiXpress is a comprehensive warehouse and logistics management platform designed to streamline operations, enhance visibility, and optimize supply chain performance for businesses of all sizes.</p>
+                        <p>Our solution integrates inventory tracking, order management, transportation logistics, and advanced analytics into a single, easy-to-use platform.</p>
+                        <a href="#" class="btn btn-primary mt-3" data-page="about">Learn More</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Warehouse Management" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="section-padding bg-light">
+            <div class="container">
+                <h2 class="section-title text-center">Key Features</h2>
+                <p class="text-center mb-5">LogiXpress offers a comprehensive suite of features to manage your warehouse and logistics operations</p>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <h4>Inventory Tracking</h4>
+                            <p>Real-time tracking of inventory levels, locations, and movement with automated alerts for low stock.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+                            <h4>Order Management</h4>
+                            <p>Efficiently process, track, and fulfill customer orders from receipt to delivery.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <h4>Real-Time Logistics</h4>
+                            <p>Monitor shipments in real-time with GPS tracking and delivery status updates.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-bar-chart"></i>
+                            </div>
+                            <h4>Reports & Analytics</h4>
+                            <p>Comprehensive analytics and customizable reports for data-driven decision making.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="section-padding why-us">
+            <div class="container">
+                <h2 class="section-title text-center">Why Choose LogiXpress?</h2>
+                <p class="text-center mb-5">We provide the tools and expertise to transform your warehouse and logistics operations</p>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div>
+                                <h4>Reliable & Secure</h4>
+                                <p>Enterprise-grade security with 99.9% uptime guarantee and data backup systems.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-lightning-charge"></i>
+                            </div>
+                            <div>
+                                <h4>Fast Implementation</h4>
+                                <p>Quick deployment with minimal disruption to your existing operations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div>
+                                <h4>Dedicated Support</h4>
+                                <p>24/7 customer support and dedicated account managers for your business.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </div>
+                            <div>
+                                <h4>Scalable Solutions</h4>
+                                <p>Grow with us - our platform scales with your business needs and volume.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div>
+                                <h4>Proven Results</h4>
+                                <p>Average of 30% reduction in operational costs for our clients within first year.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <div>
+                                <h4>Customizable</h4>
+                                <p>Tailor the platform to your specific workflows and business processes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Us Page -->
+    <div id="about-page" class="page">
+        <section class="hero-section" style="background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>About LogiXpress</h1>
+                        <p class="lead">Learn about our mission, vision, and expertise in warehouse and logistics management.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="section-title text-center">Company Overview</h2>
+                        <p class="mb-4">Founded in 2015, LogiXpress has grown to become a leading provider of warehouse and logistics management solutions. Our team of industry experts combines decades of experience in supply chain management with cutting-edge technology to deliver exceptional results for our clients.</p>
+                        
+                        <p class="mb-5">We serve over 500 businesses across various industries, helping them optimize their operations, reduce costs, and improve customer satisfaction through our comprehensive platform.</p>
+                        
+                        <div class="row mt-5">
+                            <div class="col-md-6 mb-4">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4">
+                                        <h3 class="card-title text-center mb-4">
+                                            <i class="bi bi-bullseye text-primary me-2"></i> Our Mission
+                                        </h3>
+                                        <p class="card-text">To empower businesses with innovative, reliable, and efficient warehouse and logistics management solutions that drive operational excellence and sustainable growth.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4">
+                                        <h3 class="card-title text-center mb-4">
+                                            <i class="bi bi-eye text-primary me-2"></i> Our Vision
+                                        </h3>
+                                        <p class="card-text">To be the global leader in logistics technology, transforming supply chain operations through continuous innovation and exceptional customer value.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding bg-light">
+            <div class="container">
+                <h2 class="section-title text-center">Our Expertise</h2>
+                <p class="text-center mb-5">With deep industry knowledge and technical expertise, we deliver solutions that address real-world logistics challenges</p>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center p-4">
+                            <div class="display-1 text-primary mb-3">
+                                <i class="bi bi-warehouse"></i>
+                            </div>
+                            <h4>Warehouse Optimization</h4>
+                            <p>Expertise in warehouse layout design, slotting optimization, and process improvement to maximize space utilization and efficiency.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center p-4">
+                            <div class="display-1 text-primary mb-3">
+                                <i class="bi bi-truck-front"></i>
+                            </div>
+                            <h4>Transportation Management</h4>
+                            <p>Comprehensive transportation planning, route optimization, carrier management, and freight audit capabilities.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center p-4">
+                            <div class="display-1 text-primary mb-3">
+                                <i class="bi bi-clipboard-data"></i>
+                            </div>
+                            <h4>Supply Chain Analytics</h4>
+                            <p>Advanced analytics and reporting tools to provide actionable insights for continuous improvement and strategic decision making.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card border-0 shadow">
+                            <div class="card-body p-5">
+                                <h3 class="card-title text-center mb-4">Our Values</h3>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <h5><i class="bi bi-check-circle-fill text-success me-2"></i> Customer Focus</h5>
+                                        <p>We prioritize our customers' success and build long-term partnerships based on trust and results.</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <h5><i class="bi bi-lightbulb-fill text-warning me-2"></i> Innovation</h5>
+                                        <p>We continuously seek new ways to improve and adapt to the evolving logistics landscape.</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <h5><i class="bi bi-shield-fill text-primary me-2"></i> Integrity</h5>
+                                        <p>We operate with transparency, honesty, and ethical business practices in all our dealings.</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <h5><i class="bi bi-people-fill text-info me-2"></i> Collaboration</h5>
+                                        <p>We believe in the power of teamwork, both within our organization and with our clients.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Services Page -->
+    <div id="services-page" class="page">
+        <section class="hero-section" style="background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>Our Services</h1>
+                        <p class="lead">Comprehensive warehouse and logistics solutions tailored to your business needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container">
+                <h2 class="section-title text-center">Our Core Services</h2>
+                <p class="text-center mb-5">We offer a full range of services to manage and optimize your supply chain operations</p>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="service-card">
+                            <div class="service-icon">
+                                <i class="bi bi-warehouse"></i>
+                            </div>
+                            <h3>Warehouse Management</h3>
+                            <p>Complete warehouse management solutions including inventory control, order fulfillment, receiving, putaway, picking, packing, and shipping.</p>
+                            <ul class="list-unstyled mt-3">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Real-time inventory visibility</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Automated replenishment</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Cross-docking operations</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Labor management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="service-card">
+                            <div class="service-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <h3>Inventory Control</h3>
+                            <p>Advanced inventory management with cycle counting, ABC analysis, lot tracking, serial number tracking, and expiration date management.</p>
+                            <ul class="list-unstyled mt-3">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Demand forecasting</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Safety stock optimization</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Multi-location inventory</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Returns management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="service-card">
+                            <div class="service-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <h3>Transportation & Logistics Tracking</h3>
+                            <p>End-to-end transportation management with route optimization, carrier selection, freight audit, and real-time shipment tracking.</p>
+                            <ul class="list-unstyled mt-3">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> GPS tracking integration</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Multi-modal transportation</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Proof of delivery</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Fleet management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="service-card">
+                            <div class="service-icon">
+                                <i class="bi bi-bar-chart"></i>
+                            </div>
+                            <h3>Analytics & Reporting</h3>
+                            <p>Comprehensive analytics and customizable reports to gain insights into operations, identify trends, and make data-driven decisions.</p>
+                            <ul class="list-unstyled mt-3">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Key performance indicators</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Custom dashboard creation</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Predictive analytics</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Compliance reporting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card border-0 bg-primary text-white shadow-lg">
+                            <div class="card-body p-5">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-8">
+                                        <h3 class="card-title mb-3">Ready to optimize your logistics operations?</h3>
+                                        <p class="card-text">Contact us today for a personalized demo and see how LogiXpress can transform your supply chain.</p>
+                                    </div>
+                                    <div class="col-lg-4 text-lg-end">
+                                        <a href="#" class="btn btn-light btn-lg" data-page="contact">Get Started Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Inventory Page -->
+    <div id="inventory-page" class="page">
+        <section class="hero-section" style="background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>Inventory Management</h1>
+                        <p class="lead">Track, manage, and optimize your warehouse inventory in real-time with LogiXpress.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="inventory-container">
+            <div class="container">
+                <!-- Inventory Stats -->
+                <div class="inventory-stats">
+                    <div class="stat-card">
+                        <i class="bi bi-box-seam"></i>
+                        <h3>1,247</h3>
+                        <p>Total Products</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <h3>23</h3>
+                        <p>Low Stock Items</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-check-circle"></i>
+                        <h3>1,124</h3>
+                        <p>In Stock Items</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-clock-history"></i>
+                        <h3>$124,580</h3>
+                        <p>Total Inventory Value</p>
+                    </div>
+                </div>
+
+                <!-- Inventory Actions -->
+                <div class="inventory-actions">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h4 class="mb-0">Inventory Management</h4>
+                            <p class="text-muted mb-0">Manage your warehouse inventory efficiently</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <button class="btn btn-primary me-2" id="addItemBtn">
+                                <i class="bi bi-plus-circle me-1"></i> Add New Item
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-download me-1"></i> Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Filters -->
+                <div class="inventory-filters">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="categoryFilter" class="form-label">Category</label>
+                            <select class="form-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="home-goods">Home Goods</option>
+                                <option value="toys">Toys</option>
+                                <option value="books">Books</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="statusFilter" class="form-label">Stock Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="low">Low Stock</option>
+                                <option value="medium">Medium Stock</option>
+                                <option value="high">High Stock</option>
+                                <option value="out">Out of Stock</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="locationFilter" class="form-label">Location</label>
+                            <select class="form-select" id="locationFilter">
+                                <option value="">All Locations</option>
+                                <option value="main">Main Warehouse</option>
+                                <option value="west">West Warehouse</option>
+                                <option value="east">East Warehouse</option>
+                                <option value="north">North Warehouse</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="searchFilter" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="searchFilter" placeholder="Search items...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Chart -->
+                <div class="inventory-chart">
+                    <h5 class="mb-3">Inventory Distribution by Category</h5>
+                    <canvas id="inventoryCategoryChart" height="100"></canvas>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="inventory-table-container">
+                    <h5 class="mb-3">Inventory Items</h5>
+                    <div class="table-responsive">
+                        <table class="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Current Stock</th>
+                                    <th>Min Stock</th>
+                                    <th>Status</th>
+                                    <th>Value</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <!-- Inventory items will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted">
+                            Showing <span id="showingCount">10</span> of <span id="totalCount">50</span> items
+                        </div>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page">
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h4 class="text-white">LogiXpress <span class="text-warning">Dashboard</span></h4>
+                    <p class="text-muted small">Warehouse Management</p>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="inventory"><i class="bi bi-box-seam"></i> Inventory</a></li>
+                    <li><a href="#"><i class="bi bi-clipboard-check"></i> Orders</a></li>
+                    <li><a href="#"><i class="bi bi-truck"></i> Shipments</a></li>
+                    <li><a href="#"><i class="bi bi-people"></i> Suppliers</a></li>
+                    <li><a href="#"><i class="bi bi-bar-chart"></i> Reports</a></li>
+                    <li><a href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                    <li><a href="#"><i class="bi bi-question-circle"></i> Help & Support</a></li>
+                </ul>
+                
+                <div class="mt-4 pt-4 border-top border-secondary">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-person-fill text-dark"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 text-white">John Smith</h6>
+                            <small class="text-muted">Warehouse Manager</small>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Dashboard Overview</h2>
+                        <div class="d-flex">
+                            <span class="me-3">Last updated: Today, 10:30 AM</span>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-download me-2"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="stats-card stats-card-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title">Total Shipments</h5>
+                                        <h2 class="display-6 fw-bold">1,247</h2>
+                                        <p class="mb-0"><span class="badge bg-light text-dark">+12% this month</span></p>
+                                    </div>
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6">
+                            <div class="stats-card stats-card-2">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title">Inventory Status</h5>
+                                        <h2 class="display-6 fw-bold">84%</h2>
+                                        <p class="mb-0"><span class="badge bg-light text-dark">Optimal level</span></p>
+                                    </div>
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6">
+                            <div class="stats-card stats-card-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title">Deliveries Today</h5>
+                                        <h2 class="display-6 fw-bold">89</h2>
+                                        <p class="mb-0"><span class="badge bg-light text-dark">On schedule</span></p>
+                                    </div>
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6">
+                            <div class="stats-card stats-card-4">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title">Alerts</h5>
+                                        <h2 class="display-6 fw-bold">3</h2>
+                                        <p class="mb-0"><span class="badge bg-warning text-dark">Needs attention</span></p>
+                                    </div>
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts -->
+                    <div class="row mt-4">
+                        <div class="col-lg-8">
+                            <div class="chart-container">
+                                <h5 class="mb-3">Monthly Shipment Volume</h5>
+                                <canvas id="shipmentChart" height="250"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="chart-container">
+                                <h5 class="mb-3">Inventory by Category</h5>
+                                <canvas id="inventoryChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <div class="chart-container">
+                                <h5 class="mb-3">Recent Activity</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Activity</th>
+                                                <th>User</th>
+                                                <th>Status</th>
+                                                <th>Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>10:25 AM</td>
+                                                <td>Order #4587 processed</td>
+                                                <td>John Smith</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                                <td>3 items, 2 boxes</td>
+                                            </tr>
+                                            <tr>
+                                                <td>09:45 AM</td>
+                                                <td>Shipment #3254 departed</td>
+                                                <td>System</td>
+                                                <td><span class="badge bg-info">In Transit</span></td>
+                                                <td>ETA: 2:30 PM</td>
+                                            </tr>
+                                            <tr>
+                                                <td>09:15 AM</td>
+                                                <td>Low stock alert: Widget A</td>
+                                                <td>System</td>
+                                                <td><span class="badge bg-warning">Warning</span></td>
+                                                <td>12 units remaining</td>
+                                            </tr>
+                                            <tr>
+                                                <td>08:30 AM</td>
+                                                <td>Inventory count started</td>
+                                                <td>Sarah Johnson</td>
+                                                <td><span class="badge bg-primary">In Progress</span></td>
+                                                <td>Aisle 3, Section B</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Yesterday, 4:15 PM</td>
+                                                <td>Delivery #9872 received</td>
+                                                <td>Michael Brown</td>
+                                                <td><span class="badge bg-success">Completed</span></td>
+                                                <td>45 units, 5 pallets</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact-page" class="page">
+        <section class="hero-section" style="background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>Contact Us</h1>
+                        <p class="lead">Get in touch with our team to discuss how LogiXpress can transform your warehouse and logistics operations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mb-4 mb-lg-0">
+                        <div class="contact-form">
+                            <h3 class="mb-4">Send us a Message</h3>
+                            <form id="contactForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" placeholder="Enter subject" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="5" placeholder="Enter your message" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="contact-info">
+                            <h3 class="mb-4">Contact Information</h3>
+                            <div class="mb-4">
+                                <h5><i class="bi bi-geo-alt"></i> Our Address</h5>
+                                <p>123 Logistics Plaza, Suite 500<br>Supply Chain District<br>Chicago, IL 60601</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5><i class="bi bi-telephone"></i> Phone Numbers</h5>
+                                <p>Main: (312) 555-7890<br>Support: (312) 555-7891<br>Sales: (312) 555-7892</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5><i class="bi bi-envelope"></i> Email Addresses</h5>
+                                <p>General: info@logixpress.com<br>Support: support@logixpress.com<br>Sales: sales@logixpress.com</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5><i class="bi bi-clock"></i> Business Hours</h5>
+                                <p>Monday - Friday: 8:00 AM - 7:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-lg-12">
+                        <div class="chart-container">
+                            <h4 class="mb-4">Our Locations</h4>
+                            <div class="row">
+                                <div class="col-md-4 text-center mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h5>Chicago HQ</h5>
+                                        <p class="mb-1">123 Logistics Plaza</p>
+                                        <p class="mb-1">Chicago, IL 60601</p>
+                                        <p class="mb-0">+1 (312) 555-7890</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h5>New York Office</h5>
+                                        <p class="mb-1">456 Supply Chain Ave</p>
+                                        <p class="mb-1">New York, NY 10001</p>
+                                        <p class="mb-0">+1 (212) 555-4567</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center mb-3">
+                                    <div class="p-3 border rounded">
+                                        <h5>Los Angeles Office</h5>
+                                        <p class="mb-1">789 Distribution Blvd</p>
+                                        <p class="mb-1">Los Angeles, CA 90012</p>
+                                        <p class="mb-0">+1 (213) 555-2345</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>LogiXpress</h5>
+                    <p>Providing comprehensive warehouse and logistics management solutions to optimize your supply chain operations.</p>
+                    <div class="social-links mt-4">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" data-page="home" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="#" data-page="about" class="text-white text-decoration-none">About Us</a></li>
+                        <li><a href="#" data-page="services" class="text-white text-decoration-none">Services</a></li>
+                        <li><a href="#" data-page="inventory" class="text-white text-decoration-none">Inventory</a></li>
+                        <li><a href="#" data-page="dashboard" class="text-white text-decoration-none">Dashboard</a></li>
+                        <li><a href="#" data-page="contact" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Our Services</h5>
+                    <ul class="list-unstyled">
+                        <li>Warehouse Management</li>
+                        <li>Inventory Control</li>
+                        <li>Transportation Logistics</li>
+                        <li>Analytics & Reporting</li>
+                        <li>Supply Chain Consulting</li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 mb-4">
+                    <h5>Subscribe to Newsletter</h5>
+                    <p>Stay updated with our latest news and offers.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-warning" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 LogiXpress. All Rights Reserved. | Designed with <i class="bi bi-heart-fill text-danger"></i> for Warehouse & Logistics Management</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add Inventory Item Modal -->
+    <div class="modal fade" id="addInventoryModal" tabindex="-1" aria-labelledby="addInventoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addInventoryModalLabel">Add New Inventory Item</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addInventoryForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemName" class="form-label">Product Name *</label>
+                                <input type="text" class="form-control" id="itemName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemSku" class="form-label">SKU *</label>
+                                <input type="text" class="form-control" id="itemSku" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemCategory" class="form-label">Category *</label>
+                                <select class="form-select" id="itemCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="home-goods">Home Goods</option>
+                                    <option value="toys">Toys</option>
+                                    <option value="books">Books</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemLocation" class="form-label">Warehouse Location *</label>
+                                <select class="form-select" id="itemLocation" required>
+                                    <option value="">Select Location</option>
+                                    <option value="main">Main Warehouse</option>
+                                    <option value="west">West Warehouse</option>
+                                    <option value="east">East Warehouse</option>
+                                    <option value="north">North Warehouse</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="currentStock" class="form-label">Current Stock *</label>
+                                <input type="number" class="form-control" id="currentStock" min="0" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="minStock" class="form-label">Minimum Stock *</label>
+                                <input type="number" class="form-control" id="minStock" min="0" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="unitPrice" class="form-label">Unit Price ($) *</label>
+                                <input type="number" class="form-control" id="unitPrice" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="itemDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="itemDescription" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="itemSupplier" class="form-label">Supplier</label>
+                            <input type="text" class="form-control" id="itemSupplier">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveInventoryBtn">Save Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation between pages
+            const navLinks = document.querySelectorAll('.nav-link, [data-page]');
+            const pages = document.querySelectorAll('.page');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            // Function to switch between pages
+            function switchPage(pageId) {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show selected page
+                const targetPage = document.getElementById(`${pageId}-page`);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+                
+                // Update active nav link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Close mobile menu if open
+                if (window.innerWidth <= 768) {
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    if (navbarCollapse.classList.contains('show')) {
+                        navbarCollapse.classList.remove('show');
+                    }
+                }
+                
+                // Initialize charts when dashboard is opened
+                if (pageId === 'dashboard') {
+                    setTimeout(initDashboardCharts, 100);
+                }
+                
+                // Initialize inventory when inventory page is opened
+                if (pageId === 'inventory') {
+                    setTimeout(initInventoryPage, 100);
+                }
+            }
+            
+            // Add click event to all navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) {
+                        switchPage(pageId);
+                        
+                        // Scroll to top when switching pages
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Initialize dashboard charts
+            function initDashboardCharts() {
+                // Shipment Volume Chart
+                const shipmentCtx = document.getElementById('shipmentChart').getContext('2d');
+                const shipmentChart = new Chart(shipmentCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Shipments',
+                            data: [850, 920, 1020, 1100, 1250, 1340, 1450, 1320, 1240, 1150, 1280, 1400],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Shipments'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Inventory Chart
+                const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+                const inventoryChart = new Chart(inventoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Electronics', 'Clothing', 'Home Goods', 'Toys', 'Books', 'Other'],
+                        datasets: [{
+                            data: [25, 20, 15, 18, 10, 12],
+                            backgroundColor: [
+                                '#3498db',
+                                '#e67e22',
+                                '#2ecc71',
+                                '#9b59b6',
+                                '#f1c40f',
+                                '#e74c3c'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initialize inventory page
+            function initInventoryPage() {
+                // Sample inventory data
+                const inventoryData = [
+                    { id: 'INV-001', name: 'Laptop Pro X1', category: 'electronics', location: 'main', stock: 45, minStock: 20, status: 'high', value: 899.99 },
+                    { id: 'INV-002', name: 'Wireless Headphones', category: 'electronics', location: 'west', stock: 12, minStock: 15, status: 'low', value: 129.99 },
+                    { id: 'INV-003', name: 'Office Chair', category: 'home-goods', location: 'main', stock: 28, minStock: 10, status: 'high', value: 249.99 },
+                    { id: 'INV-004', name: 'T-Shirt (Pack of 5)', category: 'clothing', location: 'east', stock: 8, minStock: 10, status: 'low', value: 39.99 },
+                    { id: 'INV-005', name: 'Smartphone X', category: 'electronics', location: 'main', stock: 32, minStock: 25, status: 'medium', value: 799.99 },
+                    { id: 'INV-006', name: 'Desk Lamp', category: 'home-goods', location: 'north', stock: 56, minStock: 15, status: 'high', value: 34.99 },
+                    { id: 'INV-007', name: 'Board Game Collection', category: 'toys', location: 'west', stock: 18, minStock: 12, status: 'medium', value: 49.99 },
+                    { id: 'INV-008', name: 'Coffee Maker', category: 'home-goods', location: 'main', stock: 22, minStock: 8, status: 'high', value: 89.99 },
+                    { id: 'INV-009', name: 'Winter Jacket', category: 'clothing', location: 'north', stock: 5, minStock: 8, status: 'low', value: 129.99 },
+                    { id: 'INV-010', name: 'Fiction Books Set', category: 'books', location: 'east', stock: 34, minStock: 20, status: 'high', value: 59.99 }
+                ];
+                
+                // Populate inventory table
+                const tableBody = document.getElementById('inventoryTableBody');
+                tableBody.innerHTML = '';
+                
+                inventoryData.forEach(item => {
+                    let stockClass = '';
+                    if (item.status === 'low') stockClass = 'stock-low';
+                    else if (item.status === 'medium') stockClass = 'stock-medium';
+                    else if (item.status === 'high') stockClass = 'stock-high';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.id}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</td>
+                        <td>${item.location.charAt(0).toUpperCase() + item.location.slice(1)} Warehouse</td>
+                        <td class="${stockClass}">${item.stock}</td>
+                        <td>${item.minStock}</td>
+                        <td><span class="status-badge status-active">${item.status.toUpperCase()}</span></td>
+                        <td>$${item.value.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Initialize inventory chart
+                const inventoryCategoryCtx = document.getElementById('inventoryCategoryChart').getContext('2d');
+                const inventoryCategoryChart = new Chart(inventoryCategoryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Electronics', 'Clothing', 'Home Goods', 'Toys', 'Books', 'Other'],
+                        datasets: [{
+                            label: 'Number of Items',
+                            data: [45, 28, 67, 34, 42, 23],
+                            backgroundColor: [
+                                'rgba(52, 152, 219, 0.7)',
+                                'rgba(231, 76, 60, 0.7)',
+                                'rgba(46, 204, 113, 0.7)',
+                                'rgba(155, 89, 182, 0.7)',
+                                'rgba(241, 196, 15, 0.7)',
+                                'rgba(230, 126, 34, 0.7)'
+                            ],
+                            borderColor: [
+                                '#3498db',
+                                '#e74c3c',
+                                '#2ecc71',
+                                '#9b59b6',
+                                '#f1c40f',
+                                '#e67e22'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Items'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Add item button click handler
+                const addItemBtn = document.getElementById('addItemBtn');
+                if (addItemBtn) {
+                    addItemBtn.addEventListener('click', function() {
+                        const modal = new bootstrap.Modal(document.getElementById('addInventoryModal'));
+                        modal.show();
+                    });
+                }
+                
+                // Save inventory item handler
+                const saveInventoryBtn = document.getElementById('saveInventoryBtn');
+                if (saveInventoryBtn) {
+                    saveInventoryBtn.addEventListener('click', function() {
+                        // Get form values
+                        const itemName = document.getElementById('itemName').value;
+                        const itemSku = document.getElementById('itemSku').value;
+                        const itemCategory = document.getElementById('itemCategory').value;
+                        const itemLocation = document.getElementById('itemLocation').value;
+                        const currentStock = parseInt(document.getElementById('currentStock').value);
+                        const minStock = parseInt(document.getElementById('minStock').value);
+                        const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+                        
+                        // Validate form
+                        if (!itemName || !itemSku || !itemCategory || !itemLocation || 
+                            isNaN(currentStock) || isNaN(minStock) || isNaN(unitPrice)) {
+                            alert('Please fill in all required fields with valid data.');
+                            return;
+                        }
+                        
+                        // Determine stock status
+                        let status = 'high';
+                        if (currentStock < minStock * 0.3) status = 'low';
+                        else if (currentStock < minStock * 0.7) status = 'medium';
+                        
+                        // Generate new ID
+                        const newId = 'INV-' + String(inventoryData.length + 101).padStart(3, '0');
+                        
+                        // Add to inventory data
+                        inventoryData.unshift({
+                            id: newId,
+                            name: itemName,
+                            category: itemCategory,
+                            location: itemLocation,
+                            stock: currentStock,
+                            minStock: minStock,
+                            status: status,
+                            value: unitPrice
+                        });
+                        
+                        // Re-render table
+                        initInventoryPage();
+                        
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
+                        modal.hide();
+                        
+                        // Reset form
+                        document.getElementById('addInventoryForm').reset();
+                        
+                        // Show success message
+                        alert(`Item "${itemName}" has been added to inventory successfully!`);
+                    });
+                }
+                
+                // Filter functionality
+                const categoryFilter = document.getElementById('categoryFilter');
+                const statusFilter = document.getElementById('statusFilter');
+                const locationFilter = document.getElementById('locationFilter');
+                const searchFilter = document.getElementById('searchFilter');
+                
+                function applyFilters() {
+                    const category = categoryFilter.value;
+                    const status = statusFilter.value;
+                    const location = locationFilter.value;
+                    const search = searchFilter.value.toLowerCase();
+                    
+                    const rows = tableBody.querySelectorAll('tr');
+                    let visibleCount = 0;
+                    
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        const itemCategory = cells[2].textContent.toLowerCase();
+                        const itemStatus = cells[6].querySelector('.status-badge').textContent.toLowerCase();
+                        const itemLocation = cells[3].textContent.toLowerCase();
+                        const itemName = cells[1].textContent.toLowerCase();
+                        
+                        let show = true;
+                        
+                        if (category && !itemCategory.includes(category)) show = false;
+                        if (status && !itemStatus.includes(status)) show = false;
+                        if (location && !itemLocation.includes(location)) show = false;
+                        if (search && !itemName.includes(search)) show = false;
+                        
+                        row.style.display = show ? '' : 'none';
+                        if (show) visibleCount++;
+                    });
+                    
+                    // Update showing count
+                    document.getElementById('showingCount').textContent = visibleCount;
+                }
+                
+                // Add event listeners to filters
+                if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
+                if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+                if (locationFilter) locationFilter.addEventListener('change', applyFilters);
+                if (searchFilter) searchFilter.addEventListener('input', applyFilters);
+            }
+            
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value;
+                    
+                    // In a real application, you would send this data to a server
+                    // For this demo, we'll just show an alert
+                    alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
+                    
+                    // Reset the form
+                    contactForm.reset();
+                });
+            }
+            
+            // Initialize the home page as default
+            switchPage('home');
+        });
+        
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '0.5rem 0';
+                navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.padding = '1rem 0';
+                navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>

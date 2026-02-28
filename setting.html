@@ -1,0 +1,1602 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - System Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #6366f1;
+            color: white;
+        }
+
+        /* User Menu */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 0;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header h2 {
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        .nav-item.active {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #4f46e5;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            color: #1e293b;
+            font-size: 2rem;
+        }
+
+        .content-header .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            color: #1e293b;
+            font-size: 1.3rem;
+        }
+
+        .card-header .badge {
+            background: #e0e7ff;
+            color: #4f46e5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-group .label-hint {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: normal;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #10b981;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Color Picker */
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #334155;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme Preview */
+        .theme-preview {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .theme-example {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+        }
+
+        .theme-header {
+            padding: 1rem;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .theme-content {
+            padding: 1rem;
+        }
+
+        .theme-example.dark {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        .theme-example.dark .theme-header {
+            background: #334155;
+            border-color: #475569;
+            color: white;
+        }
+
+        .theme-example.dark .theme-content {
+            color: #cbd5e1;
+        }
+
+        /* Users List */
+        .users-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-details p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .role-admin {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .role-manager {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .role-user {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .role-viewer {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Integration Cards */
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .integration-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .integration-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .integration-card.connected {
+            border-color: #10b981;
+        }
+
+        .integration-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .integration-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .integration-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-connected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-disconnected {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* System Status */
+        .system-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .status-icon.online {
+            background: #d1fae5;
+            color: #10b981;
+        }
+
+        .status-icon.warning {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        .status-icon.offline {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .status-details h4 {
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-details p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #1e293b;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 1rem 0;
+            }
+            
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                padding: 0.5rem;
+            }
+            
+            .nav-item {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .theme-preview {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            ⚙️ LogiXpress Settings
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="orders.html">Orders</a>
+            <a href="shipments.html">Shipments</a>
+            <a href="suppliers.html">Suppliers</a>
+            <a href="reports.html">Reports</a>
+            <a href="settings.html" class="active">Settings</a>
+        </div>
+        <div class="user-menu">
+            <div class="user-avatar">JR</div>
+            <span>John Rivera</span>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>System Settings</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a class="nav-item active" onclick="showSection('general')">
+                    <span class="nav-icon">⚙️</span>
+                    <span>General Settings</span>
+                </a>
+                <a class="nav-item" onclick="showSection('appearance')">
+                    <span class="nav-icon">🎨</span>
+                    <span>Appearance</span>
+                </a>
+                <a class="nav-item" onclick="showSection('notifications')">
+                    <span class="nav-icon">🔔</span>
+                    <span>Notifications</span>
+                </a>
+                <a class="nav-item" onclick="showSection('users')">
+                    <span class="nav-icon">👥</span>
+                    <span>User Management</span>
+                </a>
+                <a class="nav-item" onclick="showSection('integrations')">
+                    <span class="nav-icon">🔌</span>
+                    <span>Integrations</span>
+                </a>
+                <a class="nav-item" onclick="showSection('security')">
+                    <span class="nav-icon">🔒</span>
+                    <span>Security</span>
+                </a>
+                <a class="nav-item" onclick="showSection('backup')">
+                    <span class="nav-icon">💾</span>
+                    <span>Backup & Restore</span>
+                </a>
+                <a class="nav-item" onclick="showSection('api')">
+                    <span class="nav-icon">🔑</span>
+                    <span>API Access</span>
+                </a>
+                <a class="nav-item" onclick="showSection('about')">
+                    <span class="nav-icon">ℹ️</span>
+                    <span>About & Help</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- General Settings -->
+            <div id="generalSection" class="settings-section">
+                <div class="content-header">
+                    <h1>General Settings</h1>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="resetSettings()">
+                            Reset to Defaults
+                        </button>
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Company Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName" value="LogiXpress Inc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyEmail">Contact Email</label>
+                                <input type="email" id="companyEmail" value="support@logixpress.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyPhone">Phone Number</label>
+                                <input type="tel" id="companyPhone" value="+1 (555) 123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="timezone">Timezone</label>
+                                <select id="timezone">
+                                    <option selected>America/New_York (EST)</option>
+                                    <option>America/Chicago (CST)</option>
+                                    <option>America/Denver (MST)</option>
+                                    <option>America/Los_Angeles (PST)</option>
+                                    <option>Europe/London (GMT)</option>
+                                    <option>Asia/Tokyo (JST)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateFormat">Date Format</label>
+                                <select id="dateFormat">
+                                    <option>MM/DD/YYYY</option>
+                                    <option selected>DD/MM/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="currency">Default Currency</label>
+                                <select id="currency">
+                                    <option selected>USD - US Dollar</option>
+                                    <option>EUR - Euro</option>
+                                    <option>GBP - British Pound</option>
+                                    <option>JPY - Japanese Yen</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>System Preferences</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="autoSave" checked>
+                                    <label for="autoSave">Enable auto-save (saves changes every 5 minutes)</label>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <label for="emailNotifications">Send email notifications for system alerts</label>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="dataAnalytics" checked>
+                                    <label for="dataAnalytics">Share anonymous usage data to help improve LogiXpress</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sessionTimeout">Session Timeout</label>
+                                <select id="sessionTimeout">
+                                    <option>15 minutes</option>
+                                    <option>30 minutes</option>
+                                    <option selected>60 minutes</option>
+                                    <option>120 minutes</option>
+                                    <option>Never (not recommended)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recordsPerPage">Records Per Page</label>
+                                <select id="recordsPerPage">
+                                    <option>10</option>
+                                    <option selected>25</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appearance Settings (hidden by default) -->
+            <div id="appearanceSection" class="settings-section" style="display: none;">
+                <div class="content-header">
+                    <h1>Appearance Settings</h1>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Theme & Colors</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Theme</label>
+                                <div class="theme-preview">
+                                    <div class="theme-example">
+                                        <div class="theme-header">
+                                            <h4>Light Theme</h4>
+                                        </div>
+                                        <div class="theme-content">
+                                            <p>Clean and bright interface</p>
+                                        </div>
+                                    </div>
+                                    <div class="theme-example dark">
+                                        <div class="theme-header">
+                                            <h4>Dark Theme</h4>
+                                        </div>
+                                        <div class="theme-content">
+                                            <p>Reduced eye strain</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select id="theme" onchange="toggleTheme(this.value)" style="margin-top: 1rem;">
+                                    <option value="light">Light Theme</option>
+                                    <option value="dark">Dark Theme</option>
+                                    <option value="auto">Auto (System Preference)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Primary Color</label>
+                                <div class="color-picker">
+                                    <div class="color-option active" style="background: #6366f1;" onclick="selectColor('#6366f1')"></div>
+                                    <div class="color-option" style="background: #10b981;" onclick="selectColor('#10b981')"></div>
+                                    <div class="color-option" style="background: #f59e0b;" onclick="selectColor('#f59e0b')"></div>
+                                    <div class="color-option" style="background: #ef4444;" onclick="selectColor('#ef4444')"></div>
+                                    <div class="color-option" style="background: #8b5cf6;" onclick="selectColor('#8b5cf6')"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Dashboard Customization</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group full-width">
+                            <label>Default Dashboard View</label>
+                            <select id="defaultDashboard">
+                                <option selected>Overview Dashboard</option>
+                                <option>Inventory Dashboard</option>
+                                <option>Shipping Dashboard</option>
+                                <option>Sales Dashboard</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="compactMode">
+                                <label for="compactMode">Compact mode (denser information display)</label>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="showCharts" checked>
+                                <label for="showCharts">Show charts and graphs in dashboards</label>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="animations" checked>
+                                <label for="animations">Enable animations and transitions</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management (hidden by default) -->
+            <div id="usersSection" class="settings-section" style="display: none;">
+                <div class="content-header">
+                    <h1>User Management</h1>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="showAddUserModal()">
+                            + Add New User
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>System Users <span class="badge">8 users</span></h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="users-list">
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar-small">JR</div>
+                                    <div class="user-details">
+                                        <h4>John Rivera</h4>
+                                        <p>john.rivera@company.com</p>
+                                    </div>
+                                </div>
+                                <div class="user-actions">
+                                    <span class="user-role role-admin">Administrator</span>
+                                </div>
+                            </div>
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar-small">SJ</div>
+                                    <div class="user-details">
+                                        <h4>Sarah Johnson</h4>
+                                        <p>sarah.j@company.com</p>
+                                    </div>
+                                </div>
+                                <div class="user-actions">
+                                    <span class="user-role role-manager">Manager</span>
+                                </div>
+                            </div>
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar-small">MC</div>
+                                    <div class="user-details">
+                                        <h4>Michael Chen</h4>
+                                        <p>michael.chen@company.com</p>
+                                    </div>
+                                </div>
+                                <div class="user-actions">
+                                    <span class="user-role role-user">User</span>
+                                </div>
+                            </div>
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar-small">EW</div>
+                                    <div class="user-details">
+                                        <h4>Emma Wilson</h4>
+                                        <p>emma.w@company.com</p>
+                                    </div>
+                                </div>
+                                <div class="user-actions">
+                                    <span class="user-role role-viewer">Viewer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Permissions & Roles</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Administrator</label>
+                                <p class="label-hint">Full system access and configuration</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Manager</label>
+                                <p class="label-hint">Can manage inventory, orders, and shipments</p>
+                            </div>
+                            <div class="form-group">
+                                <label>User</label>
+                                <p class="label-hint">Can create orders and view inventory</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Viewer</label>
+                                <p class="label-hint">Read-only access to all modules</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Settings (hidden by default) -->
+            <div id="securitySection" class="settings-section" style="display: none;">
+                <div class="content-header">
+                    <h1>Security Settings</h1>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Authentication</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="passwordPolicy">Password Policy</label>
+                                <select id="passwordPolicy">
+                                    <option>Basic (6 characters minimum)</option>
+                                    <option selected>Standard (8 characters, letters & numbers)</option>
+                                    <option>Strong (10 characters, mixed case & symbols)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordExpiry">Password Expiry</label>
+                                <select id="passwordExpiry">
+                                    <option>Never</option>
+                                    <option>30 days</option>
+                                    <option selected>90 days</option>
+                                    <option>180 days</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="twoFactorAuth">
+                                    <label for="twoFactorAuth">Enable two-factor authentication for all users</label>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="loginAlerts" checked>
+                                    <label for="loginAlerts">Send email alerts for suspicious login attempts</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Access Control</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>IP Whitelist</label>
+                                <textarea id="ipWhitelist" rows="4" placeholder="Enter IP addresses (one per line)">192.168.1.*
+10.0.0.*</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>API Rate Limit</label>
+                                <select id="apiRateLimit">
+                                    <option>100 requests/minute</option>
+                                    <option selected>500 requests/minute</option>
+                                    <option>1000 requests/minute</option>
+                                    <option>Unlimited</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Security Audit</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="system-status">
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    ✅
+                                </div>
+                                <div class="status-details">
+                                    <h4>Last Security Scan</h4>
+                                    <p>Today, 02:30 AM</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    🔒
+                                </div>
+                                <div class="status-details">
+                                    <h4>SSL Certificate</h4>
+                                    <p>Valid until 2027-01-01</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    👁️
+                                </div>
+                                <div class="status-details">
+                                    <h4>Failed Logins</h4>
+                                    <p>3 attempts in last 24h</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="runSecurityScan()">
+                            🔍 Run Security Scan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About & Help (hidden by default) -->
+            <div id="aboutSection" class="settings-section" style="display: none;">
+                <div class="content-header">
+                    <h1>About & Help</h1>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>System Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Version</label>
+                                <p><strong>LogiXpress v3.2.0</strong></p>
+                            </div>
+                            <div class="form-group">
+                                <label>Build Date</label>
+                                <p>February 3, 2026</p>
+                            </div>
+                            <div class="form-group">
+                                <label>License</label>
+                                <p>Enterprise Edition</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Support</label>
+                                <p>support@logixpress.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>Help & Resources</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <button class="btn btn-secondary" onclick="openDocumentation()">
+                                    📚 User Documentation
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-secondary" onclick="openTraining()">
+                                    🎓 Video Tutorials
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-secondary" onclick="openSupport()">
+                                    💬 Contact Support
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-secondary" onclick="checkUpdates()">
+                                    🔄 Check for Updates
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h3>System Health</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="system-status">
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    💾
+                                </div>
+                                <div class="status-details">
+                                    <h4>Database</h4>
+                                    <p>Healthy (84% free)</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    ⚡
+                                </div>
+                                <div class="status-details">
+                                    <h4>Performance</h4>
+                                    <p>Optimal</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon online">
+                                    📊
+                                </div>
+                                <div class="status-details">
+                                    <h4>Storage</h4>
+                                    <p>2.4GB / 10GB used</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon warning">
+                                    ⏰
+                                </div>
+                                <div class="status-details">
+                                    <h4>Last Backup</h4>
+                                    <p>2 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More sections would follow similar pattern for other settings -->
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button class="close-modal" onclick="closeAddUserModal()">×</button>
+            </div>
+            <div style="padding: 1rem 0;">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="newUserName" placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="newUserEmail" placeholder="user@company.com">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="newUserRole">
+                        <option value="viewer">Viewer</option>
+                        <option value="user">User</option>
+                        <option value="manager">Manager</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Send Welcome Email</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="sendWelcomeEmail" checked>
+                        <label for="sendWelcomeEmail">Send account activation instructions</label>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn btn-secondary" onclick="closeAddUserModal()">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" onclick="createUser()">
+                    Create User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 LogiXpress System. All rights reserved.</p>
+        <p>System Status: <span style="color: #10b981; font-weight: 600;">● Operational</span> | Uptime: 99.8% | Last updated: Today 14:30 EST</p>
+    </footer>
+
+    <script>
+        // Navigation between settings sections
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId + 'Section').style.display = 'block';
+            
+            // Add active class to clicked nav item
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Scroll to top of content
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        // Theme selection
+        function toggleTheme(theme) {
+            if (theme === 'dark') {
+                document.body.style.backgroundColor = '#0f172a';
+                document.body.style.color = '#e2e8f0';
+            } else {
+                document.body.style.backgroundColor = '#f8fafc';
+                document.body.style.color = '#334155';
+            }
+        }
+
+        // Color selection
+        function selectColor(color) {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update primary color in the UI (demo only)
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.style.background = `linear-gradient(135deg, ${color}, ${darkenColor(color, 20)})`;
+            });
+            
+            document.querySelectorAll('.nav-item.active').forEach(item => {
+                item.style.backgroundColor = color + '20';
+            });
+        }
+
+        // Helper function to darken color
+        function darkenColor(color, percent) {
+            let num = parseInt(color.replace("#", ""), 16);
+            let amt = Math.round(2.55 * percent);
+            let R = (num >> 16) - amt;
+            let G = (num >> 8 & 0x00FF) - amt;
+            let B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                         (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                         (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        // Save settings
+        function saveSettings() {
+            // Show saving indicator
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '⏳ Saving...';
+            event.target.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                event.target.innerHTML = originalText;
+                event.target.disabled = false;
+                
+                // Show success message
+                alert('Settings saved successfully!');
+                
+                // Log saved settings for demo
+                const settings = {
+                    companyName: document.getElementById('companyName').value,
+                    timezone: document.getElementById('timezone').value,
+                    theme: document.getElementById('theme').value,
+                    // Add more settings as needed
+                };
+                console.log('Settings saved:', settings);
+            }, 1000);
+        }
+
+        // Reset settings to defaults
+        function resetSettings() {
+            if (confirm('Are you sure you want to reset all settings to default values? This action cannot be undone.')) {
+                // Show resetting indicator
+                const originalText = event.target.innerHTML;
+                event.target.innerHTML = '⏳ Resetting...';
+                event.target.disabled = true;
+                
+                setTimeout(() => {
+                    event.target.innerHTML = originalText;
+                    event.target.disabled = false;
+                    
+                    // Reset form values (simplified for demo)
+                    document.getElementById('companyName').value = 'LogiXpress Inc.';
+                    document.getElementById('timezone').value = 'America/New_York (EST)';
+                    document.getElementById('theme').value = 'light';
+                    document.getElementById('autoSave').checked = true;
+                    
+                    alert('Settings have been reset to default values.');
+                }, 1500);
+            }
+        }
+
+        // Add User Modal
+        function showAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'flex';
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'none';
+        }
+
+        function createUser() {
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const role = document.getElementById('newUserRole').value;
+            
+            if (!name || !email) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Create user card
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+                <div class="user-info">
+                    <div class="user-avatar-small">${name.split(' ').map(n => n[0]).join('').toUpperCase()}</div>
+                    <div class="user-details">
+                        <h4>${name}</h4>
+                        <p>${email}</p>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <span class="user-role role-${role}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
+                </div>
+            `;
+            
+            // Add to users list
+            document.querySelector('.users-list').appendChild(userCard);
+            
+            // Close modal and reset form
+            closeAddUserModal();
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            
+            alert(`User ${name} has been created successfully!`);
+        }
+
+        // Security scan
+        function runSecurityScan() {
+            event.target.innerHTML = '🔍 Scanning...';
+            event.target.disabled = true;
+            
+            setTimeout(() => {
+                event.target.innerHTML = '🔍 Run Security Scan';
+                event.target.disabled = false;
+                
+                alert('Security scan completed!\n\nResults:\n✓ No vulnerabilities found\n✓ All systems secure\n✓ Firewall active\n✓ Encryption enabled');
+            }, 2000);
+        }
+
+        // Help functions
+        function openDocumentation() {
+            alert('Opening user documentation...\n\nIn a real application, this would open the documentation portal.');
+        }
+
+        function openTraining() {
+            alert('Opening video tutorials...\n\nIn a real application, this would open the training platform.');
+        }
+
+        function openSupport() {
+            alert('Opening support contact form...\n\nIn a real application, this would open the support ticket system.');
+        }
+
+        function checkUpdates() {
+            event.target.innerHTML = '🔄 Checking...';
+            
+            setTimeout(() => {
+                event.target.innerHTML = '🔄 Check for Updates';
+                alert('Your system is up to date!\n\nCurrent version: LogiXpress v3.2.0\nLatest version: LogiXpress v3.2.0');
+            }, 1500);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addUserModal');
+            if (event.target === modal) {
+                closeAddUserModal();
+            }
+        };
+
+        // Initialize with saved preferences
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved theme preference
+            const savedTheme = localStorage.getItem('logixpress-theme') || 'light';
+            document.getElementById('theme').value = savedTheme;
+            toggleTheme(savedTheme);
+            
+            console.log('Settings page loaded successfully.');
+        });
+    </script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>

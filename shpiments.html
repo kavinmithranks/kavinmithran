@@ -1,0 +1,1554 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - Shipments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Section */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Stats Cards */
+        .shipment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.blue { border-color: #3b82f6; }
+        .stat-card.green { border-color: #10b981; }
+        .stat-card.yellow { border-color: #f59e0b; }
+        .stat-card.red { border-color: #ef4444; }
+        .stat-card.purple { border-color: #8b5cf6; }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .stat-card .trend {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .trend.up { color: #10b981; }
+        .trend.down { color: #ef4444; }
+
+        /* Controls Bar */
+        .controls-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 1rem;
+            width: 100%;
+            color: #334155;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #334155;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Shipments Table */
+        .shipments-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+
+        .shipments-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .shipments-table thead {
+            background-color: #f8fafc;
+        }
+
+        .shipments-table th {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .shipments-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .shipments-table tbody tr {
+            transition: background-color 0.3s;
+        }
+
+        .shipments-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-intransit {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .status-outfordelivery {
+            background-color: #fce7f3;
+            color: #9d174d;
+        }
+
+        .status-delivered {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-delayed {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-cancelled {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Priority Badges */
+        .priority-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .priority-high {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority-low {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-view {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-track {
+            background-color: #8b5cf6;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-icon:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .page-info {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .page-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .page-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .page-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-header h2 {
+            color: #1e293b;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 0.5rem;
+        }
+
+        /* Shipment Details */
+        .shipment-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .detail-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .detail-group h3 {
+            color: #475569;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #64748b;
+            width: 180px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #334155;
+            flex: 1;
+        }
+
+        /* Progress Bar */
+        .tracking-progress {
+            grid-column: 1 / -1;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .step-active {
+            border-color: #3b82f6;
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .step-completed {
+            border-color: #10b981;
+            background-color: #10b981;
+            color: white;
+        }
+
+        /* Map Container */
+        .map-container {
+            grid-column: 1 / -1;
+            height: 200px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .shipment-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .shipments-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+
+            .shipment-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            📦 LogiXpress
+        </div>
+        <div class="nav-links">
+            <a href="shpiments.html" class="active">Shipments</a>
+            <a href="orders.html">Orders</a>
+            <a href="help.html">Help & Support</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Shipment Management</h1>
+            <div class="header-actions">
+                <button class="btn-primary" onclick="showCreateModal()">
+                    <span>+</span> New Shipment
+                </button>
+                <button class="btn-primary">
+                    📄 Export Report
+                </button>
+                <button class="btn-primary">
+                    🔄 Bulk Update
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="shipment-stats">
+            <div class="stat-card blue">
+                <h3>Today's Shipments</h3>
+                <div id="statToday" class="value">89</div>
+                <div class="trend up">↑ +12 from yesterday</div>
+            </div>
+            <div class="stat-card green">
+                <h3>On-Time Delivery</h3>
+                <div id="statOnTime" class="value">94%</div>
+                <div class="trend up">↑ +2% this week</div>
+            </div>
+            <div class="stat-card yellow">
+                <h3>In Transit</h3>
+                <div id="statInTransit" class="value">156</div>
+                <div class="trend">↔ Steady</div>
+            </div>
+            <div class="stat-card red">
+                <h3>Delayed</h3>
+                <div id="statDelayed" class="value">7</div>
+                <div class="trend down">↓ -3 from yesterday</div>
+            </div>
+            <div class="stat-card purple">
+                <h3>Total This Month</h3>
+                <div id="statTotal" class="value">1,247</div>
+                <div class="trend up">↑ +12% from last month</div>
+            </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+            <div class="search-box">
+                🔍
+                <input type="text" id="searchShipments" placeholder="Search by tracking number, customer, or destination..." oninput="filterShipments()">
+            </div>
+            <div class="filter-controls">
+                <select class="filter-select" id="statusFilter" onchange="filterShipments()">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="In Transit">In Transit</option>
+                    <option value="Out for Delivery">Out for Delivery</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Delayed">Delayed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <select class="filter-select" id="priorityFilter" onchange="filterShipments()">
+                    <option value="">All Priorities</option>
+                    <option value="High">High Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="Low">Low Priority</option>
+                </select>
+                <select class="filter-select" id="carrierFilter" onchange="filterShipments()">
+                    <option value="">All Carriers</option>
+                    <option value="FedEx">FedEx</option>
+                    <option value="UPS">UPS</option>
+                    <option value="DHL">DHL</option>
+                    <option value="USPS">USPS</option>
+                    <option value="Amazon Logistics">Amazon Logistics</option>
+                </select>
+                <input type="date" class="filter-select" id="dateFilter" onchange="filterShipments()">
+            </div>
+        </div>
+
+        <!-- Shipments Table -->
+        <section class="shipments-section">
+            <div class="section-header">
+                <h2>Recent Shipments</h2>
+                <div style="color: #64748b; font-size: 0.95rem;">
+                    Showing <span id="showingCount">15</span> of <span id="totalCount">1,247</span> shipments
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="shipments-table">
+                    <thead>
+                        <tr>
+                            <th>Tracking #</th>
+                            <th>Customer</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                            <th>Carrier</th>
+                            <th>Est. Delivery</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipmentsTableBody">
+                        <!-- Shipments will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="page-info">
+                    Page 1 of 12
+                </div>
+                <div class="page-controls">
+                    <button class="page-btn">« Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">Next »</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Shipment Details Modal -->
+    <div id="shipmentModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="shipmentModalTitle">
+        <div class="modal-content" id="shipmentModalContent">
+            <div class="modal-header">
+                <h2 id="shipmentModalTitle">Shipment Details</h2>
+                <button class="close-modal" type="button" onclick="closeModal()" aria-label="Close shipment details">×</button>
+            </div>
+            <div id="modalContent">
+                <!-- Dynamic content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Shipment Modal -->
+    <div id="createModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="createModalTitle">
+        <div class="modal-content" id="createModalContent">
+            <div class="modal-header">
+                <h2 id="createModalTitle">Create New Shipment</h2>
+                <button class="close-modal" type="button" onclick="closeCreateModal()" aria-label="Close create shipment">×</button>
+            </div>
+            <div id="createFormContent">
+                <div class="shipment-details">
+                    <div class="detail-group">
+                        <h3>Order Information</h3>
+                        <div class="detail-row">
+                            <label class="detail-label">Order ID:</label>
+                            <select id="createOrderId" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;">
+                                <option value="">Select Order</option>
+                                <option value="ORD-1001">ORD-1001 - John Smith</option>
+                                <option value="ORD-1002">ORD-1002 - Emma Johnson</option>
+                                <option value="ORD-1003">ORD-1003 - Carlos Ruiz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <h3>Shipping Details</h3>
+                        <div class="detail-row">
+                            <label class="detail-label">Carrier:</label>
+                            <select id="createCarrier" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;">
+                                <option value="FedEx">FedEx</option>
+                                <option value="UPS">UPS</option>
+                                <option value="DHL">DHL</option>
+                                <option value="USPS">USPS</option>
+                            </select>
+                        </div>
+                        <div class="detail-row">
+                            <label class="detail-label">Service Type:</label>
+                            <select id="createService" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;">
+                                <option value="Ground">Ground</option>
+                                <option value="Express">Express</option>
+                                <option value="Overnight">Overnight</option>
+                                <option value="International">International</option>
+                            </select>
+                        </div>
+                        <div class="detail-row">
+                            <label class="detail-label">Priority:</label>
+                            <select id="createPriority" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="detail-group full-width">
+                        <h3>Destination Address</h3>
+                        <div class="detail-row">
+                            <label class="detail-label">Address:</label>
+                            <input id="createAddress" type="text" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;" placeholder="Street address">
+                        </div>
+                        <div class="detail-row">
+                            <label class="detail-label">City:</label>
+                            <input id="createCity" type="text" class="detail-value" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 100%;" placeholder="City">
+                        </div>
+                        <div class="detail-row">
+                            <label class="detail-label">State/ZIP:</label>
+                            <div style="display: flex; gap: 0.5rem; width: 100%;">
+                                <input id="createState" type="text" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 70%;" placeholder="State">
+                                <input id="createZip" type="text" style="border: 1px solid #e2e8f0; padding: 0.5rem; border-radius: 6px; width: 30%;" placeholder="ZIP">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group full-width">
+                        <button class="btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" onclick="createShipment()">
+                            📦 Create Shipment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 LogiXpress Shipment Management System. All rights reserved.</p>
+        <p>Version 2.1.0 | Last updated: February 2026</p>
+    </footer>
+
+    <script>
+        // Sample shipment data
+        let shipments = [
+            { id: "SHIP-2301", tracking: "1Z999AA1234567890", customer: "John Smith", orderId: "ORD-1001", 
+              destination: "123 Main St, New York, NY 10001", status: "Delivered", carrier: "FedEx", 
+              service: "Ground", priority: "Low", shippedDate: "2026-02-01", estDelivery: "2026-02-05", 
+              actualDelivery: "2026-02-04", weight: "5.2 kg", dimensions: "30×20×15 cm", cost: "$24.99",
+              notes: "Left at front door" },
+            
+            { id: "SHIP-2302", tracking: "1Z999BB1234567891", customer: "Emma Johnson", orderId: "ORD-1002", 
+              destination: "456 Oak Ave, Los Angeles, CA 90001", status: "Out for Delivery", carrier: "UPS", 
+              service: "Express", priority: "High", shippedDate: "2026-02-03", estDelivery: "2026-02-04", 
+              actualDelivery: "", weight: "2.1 kg", dimensions: "25×15×10 cm", cost: "$42.50",
+              notes: "Signature required" },
+            
+            { id: "SHIP-2303", tracking: "1Z999CC1234567892", customer: "Carlos Ruiz", orderId: "ORD-1003", 
+              destination: "789 Pine Rd, Chicago, IL 60601", status: "In Transit", carrier: "DHL", 
+              service: "Overnight", priority: "High", shippedDate: "2026-02-02", estDelivery: "2026-02-03", 
+              actualDelivery: "", weight: "8.5 kg", dimensions: "40×30×25 cm", cost: "$89.99",
+              notes: "Fragile - Handle with care" },
+            
+            { id: "SHIP-2304", tracking: "1Z999DD1234567893", customer: "Maya Patel", orderId: "ORD-1004", 
+              destination: "321 Elm St, Houston, TX 77001", status: "Processing", carrier: "USPS", 
+              service: "Ground", priority: "Medium", shippedDate: "2026-02-03", estDelivery: "2026-02-10", 
+              actualDelivery: "", weight: "3.7 kg", dimensions: "35×25×20 cm", cost: "$18.75",
+              notes: "" },
+            
+            { id: "SHIP-2305", tracking: "1Z999EE1234567894", customer: "Alex Chen", orderId: "ORD-1005", 
+              destination: "654 Maple Ave, Phoenix, AZ 85001", status: "Pending", carrier: "FedEx", 
+              service: "Ground", priority: "Low", shippedDate: "", estDelivery: "2026-02-08", 
+              actualDelivery: "", weight: "6.3 kg", dimensions: "45×35×30 cm", cost: "$32.45",
+              notes: "Awaiting packaging" },
+            
+            { id: "SHIP-2306", tracking: "1Z999FF1234567895", customer: "Sarah Williams", orderId: "ORD-1006", 
+              destination: "987 Birch Blvd, Philadelphia, PA 19101", status: "Delayed", carrier: "UPS", 
+              service: "Express", priority: "High", shippedDate: "2026-01-30", estDelivery: "2026-02-01", 
+              actualDelivery: "", weight: "4.8 kg", dimensions: "30×20×20 cm", cost: "$55.25",
+              notes: "Weather delay - Winter storm" },
+            
+            { id: "SHIP-2307", tracking: "1Z999GG1234567896", customer: "David Kim", orderId: "ORD-1007", 
+              destination: "147 Cedar Ln, San Antonio, TX 78201", status: "In Transit", carrier: "DHL", 
+              service: "International", priority: "High", shippedDate: "2026-02-01", estDelivery: "2026-02-07", 
+              actualDelivery: "", weight: "12.5 kg", dimensions: "50×40×35 cm", cost: "$156.80",
+              notes: "International shipment - Customs clearance required" },
+            
+            { id: "SHIP-2308", tracking: "1Z999HH1234567897", customer: "Lisa Brown", orderId: "ORD-1008", 
+              destination: "258 Walnut St, San Diego, CA 92101", status: "Cancelled", carrier: "FedEx", 
+              service: "Ground", priority: "Low", shippedDate: "", estDelivery: "", 
+              actualDelivery: "", weight: "2.5 kg", dimensions: "25×15×10 cm", cost: "$21.99",
+              notes: "Cancelled by customer" }
+        ];
+
+        let nextShipmentId = 2309;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderShipmentsTable(shipments);
+            updateStatistics();
+            loadOrderDropdown();
+        });
+
+        function loadOrderDropdown() {
+            const storedOrders = localStorage.getItem('logixpress_orders');
+            if (storedOrders) {
+                const orders = JSON.parse(storedOrders);
+                const select = document.getElementById('createOrderId');
+                if (select) {
+                    // Keep the first "Select Order" option
+                    select.innerHTML = '<option value="">Select Order</option>';
+                    
+                    orders.forEach(order => {
+                        const option = document.createElement('option');
+                        option.value = order.id;
+                        option.textContent = `${order.id} - ${order.customer}`;
+                        select.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        // Render shipments table
+        function renderShipmentsTable(shipmentsToRender) {
+            const tableBody = document.getElementById('shipmentsTableBody');
+            tableBody.innerHTML = '';
+            
+            if (shipmentsToRender.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 3rem; color: #64748b;">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">📦</div>
+                            No shipments found matching your criteria.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            shipmentsToRender.forEach(shipment => {
+                const row = document.createElement('tr');
+                
+                // Determine status class and icon
+                let statusClass = '';
+                let statusIcon = '';
+                switch(shipment.status.toLowerCase()) {
+                    case 'pending': 
+                        statusClass = 'status-pending';
+                        statusIcon = '⏳';
+                        break;
+                    case 'processing': 
+                        statusClass = 'status-processing';
+                        statusIcon = '⚙️';
+                        break;
+                    case 'in transit': 
+                        statusClass = 'status-intransit';
+                        statusIcon = '🚚';
+                        break;
+                    case 'out for delivery': 
+                        statusClass = 'status-outfordelivery';
+                        statusIcon = '📦';
+                        break;
+                    case 'delivered': 
+                        statusClass = 'status-delivered';
+                        statusIcon = '✅';
+                        break;
+                    case 'delayed': 
+                        statusClass = 'status-delayed';
+                        statusIcon = '⚠️';
+                        break;
+                    case 'cancelled': 
+                        statusClass = 'status-cancelled';
+                        statusIcon = '❌';
+                        break;
+                }
+                
+                // Determine priority class
+                let priorityClass = '';
+                switch(shipment.priority.toLowerCase()) {
+                    case 'high': priorityClass = 'priority-high'; break;
+                    case 'medium': priorityClass = 'priority-medium'; break;
+                    case 'low': priorityClass = 'priority-low'; break;
+                }
+                
+                // Format dates
+                const formatDate = (dateStr) => {
+                    if (!dateStr) return 'N/A';
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                };
+                
+                // Shorten destination for table view
+                const shortDestination = shipment.destination.split(',')[0];
+                
+                row.innerHTML = `
+                    <td>
+                        <div style="font-weight: 600; font-family: monospace;">${shipment.tracking}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${shipment.id}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${shipment.customer}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${shipment.orderId}</div>
+                    </td>
+                    <td>
+                        <div>${shortDestination}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${shipment.destination.split(',')[1]}</div>
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${statusIcon} ${shipment.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${shipment.carrier}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${shipment.service}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${formatDate(shipment.estDelivery)}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${shipment.actualDelivery ? 'Delivered ' + formatDate(shipment.actualDelivery) : 'Pending'}</div>
+                    </td>
+                    <td>
+                        <span class="priority-badge ${priorityClass}">${shipment.priority}</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-view" onclick="viewShipment('${shipment.id}')" title="View Details">
+                                👁️
+                            </button>
+                            <button class="btn-icon btn-track" onclick="trackShipment('${shipment.tracking}')" title="Track Shipment">
+                                📍
+                            </button>
+                            <button class="btn-icon btn-edit" onclick="editShipment('${shipment.id}')" title="Edit Shipment">
+                                ✏️
+                            </button>
+                            <button class="btn-icon btn-delete" onclick="deleteShipment('${shipment.id}')" title="Delete Shipment">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Update showing count
+            document.getElementById('showingCount').textContent = shipmentsToRender.length;
+            document.getElementById('totalCount').textContent = shipments.length;
+        }
+
+        // Filter shipments based on search and filters
+        function filterShipments() {
+            const searchTerm = document.getElementById('searchShipments').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const carrierFilter = document.getElementById('carrierFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            let filteredShipments = shipments;
+            
+            // Apply text search
+            if (searchTerm) {
+                filteredShipments = filteredShipments.filter(shipment => 
+                    shipment.tracking.toLowerCase().includes(searchTerm) ||
+                    shipment.id.toLowerCase().includes(searchTerm) ||
+                    shipment.customer.toLowerCase().includes(searchTerm) ||
+                    shipment.destination.toLowerCase().includes(searchTerm) ||
+                    shipment.orderId.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply status filter
+            if (statusFilter) {
+                filteredShipments = filteredShipments.filter(shipment => 
+                    shipment.status === statusFilter
+                );
+            }
+            
+            // Apply priority filter
+            if (priorityFilter) {
+                filteredShipments = filteredShipments.filter(shipment => 
+                    shipment.priority === priorityFilter
+                );
+            }
+            
+            // Apply carrier filter
+            if (carrierFilter) {
+                filteredShipments = filteredShipments.filter(shipment => 
+                    shipment.carrier === carrierFilter
+                );
+            }
+            
+            // Apply date filter
+            if (dateFilter) {
+                filteredShipments = filteredShipments.filter(shipment => 
+                    shipment.shippedDate === dateFilter || 
+                    shipment.estDelivery === dateFilter
+                );
+            }
+            
+            renderShipmentsTable(filteredShipments);
+        }
+
+        // View shipment details
+        function viewShipment(shipmentId) {
+            const shipment = shipments.find(s => s.id === shipmentId);
+            if (!shipment) return;
+            
+            const modalContent = document.getElementById('modalContent');
+            
+            // Format dates nicely
+            const formatDateFull = (dateStr) => {
+                if (!dateStr) return 'Not yet shipped';
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            };
+            
+            // Determine progress steps based on status
+            let progressSteps = ['Preparing', 'Shipped', 'In Transit', 'Out for Delivery', 'Delivered'];
+            let currentStep = 0;
+            
+            switch(shipment.status) {
+                case 'Pending': currentStep = 0; break;
+                case 'Processing': currentStep = 0; break;
+                case 'In Transit': currentStep = 2; break;
+                case 'Out for Delivery': currentStep = 3; break;
+                case 'Delivered': currentStep = 4; break;
+                case 'Delayed': currentStep = 2; break;
+                case 'Cancelled': currentStep = 0; break;
+            }
+            
+            modalContent.innerHTML = `
+                <div class="shipment-details">
+                    <!-- Basic Information -->
+                    <div class="detail-group">
+                        <h3>Shipment Information</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipment ID:</span>
+                            <span class="detail-value" style="font-weight: 600; font-family: monospace;">${shipment.id}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tracking Number:</span>
+                            <span class="detail-value" style="font-weight: 600; font-family: monospace;">${shipment.tracking}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Order ID:</span>
+                            <span class="detail-value">${shipment.orderId}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Customer:</span>
+                            <span class="detail-value">${shipment.customer}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Status & Priority -->
+                    <div class="detail-group">
+                        <h3>Status & Priority</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">
+                                <span class="status-badge ${getStatusClass(shipment.status)}">
+                                    ${getStatusIcon(shipment.status)} ${shipment.status}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Priority:</span>
+                            <span class="detail-value">
+                                <span class="priority-badge ${getPriorityClass(shipment.priority)}">
+                                    ${shipment.priority}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Carrier:</span>
+                            <span class="detail-value">${shipment.carrier} - ${shipment.service}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Shipping Dates -->
+                    <div class="detail-group">
+                        <h3>Shipping Dates</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipped Date:</span>
+                            <span class="detail-value">${formatDateFull(shipment.shippedDate)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estimated Delivery:</span>
+                            <span class="detail-value" style="font-weight: 600;">${formatDateFull(shipment.estDelivery)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Actual Delivery:</span>
+                            <span class="detail-value">${shipment.actualDelivery ? formatDateFull(shipment.actualDelivery) : 'Not yet delivered'}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Package Details -->
+                    <div class="detail-group">
+                        <h3>Package Details</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Weight:</span>
+                            <span class="detail-value">${shipment.weight}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Dimensions:</span>
+                            <span class="detail-value">${shipment.dimensions}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipping Cost:</span>
+                            <span class="detail-value" style="font-weight: 600;">${shipment.cost}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Destination -->
+                    <div class="detail-group full-width">
+                        <h3>Destination</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Address:</span>
+                            <span class="detail-value">${shipment.destination}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Tracking Progress -->
+                    <div class="detail-group full-width tracking-progress">
+                        <h3>Tracking Progress</h3>
+                        <div class="progress-steps">
+                            ${progressSteps.map((step, index) => `
+                                <div class="progress-step">
+                                    <div class="step-icon ${index < currentStep ? 'step-completed' : index === currentStep ? 'step-active' : ''}">
+                                        ${index < currentStep ? '✓' : index + 1}
+                                    </div>
+                                    <div class="step-label">${step}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="detail-group full-width">
+                        <h3>Location</h3>
+                        <div class="map-container">
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📍</div>
+                                <div>Shipment Tracking Map</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem;">${shipment.status === 'In Transit' ? 'Currently in transit to destination' : shipment.status === 'Delivered' ? 'Delivered to destination' : 'Awaiting shipment'}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="detail-group full-width">
+                        <h3>Notes</h3>
+                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; color: #334155;">
+                            ${shipment.notes || 'No additional notes.'}
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="detail-group full-width" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="btn-primary" onclick="trackShipment('${shipment.tracking}')" style="flex: 1;">
+                            📍 Track on ${shipment.carrier} Website
+                        </button>
+                        <button class="btn-primary" onclick="printLabel('${shipment.id}')" style="flex: 1;">
+                            🖨️ Print Shipping Label
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('shipmentModal').style.display = 'flex';
+        }
+
+        // Helper functions for status/priority
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'pending': return 'status-pending';
+                case 'processing': return 'status-processing';
+                case 'in transit': return 'status-intransit';
+                case 'out for delivery': return 'status-outfordelivery';
+                case 'delivered': return 'status-delivered';
+                case 'delayed': return 'status-delayed';
+                case 'cancelled': return 'status-cancelled';
+                default: return '';
+            }
+        }
+
+        function getStatusIcon(status) {
+            switch(status.toLowerCase()) {
+                case 'pending': return '⏳';
+                case 'processing': return '⚙️';
+                case 'in transit': return '🚚';
+                case 'out for delivery': return '📦';
+                case 'delivered': return '✅';
+                case 'delayed': return '⚠️';
+                case 'cancelled': return '❌';
+                default: return '';
+            }
+        }
+
+        function getPriorityClass(priority) {
+            switch(priority.toLowerCase()) {
+                case 'high': return 'priority-high';
+                case 'medium': return 'priority-medium';
+                case 'low': return 'priority-low';
+                default: return '';
+            }
+        }
+
+        // Track shipment (opens carrier website)
+        function trackShipment(trackingNumber) {
+            // In a real application, this would open the carrier's tracking page
+            alert(`Tracking shipment: ${trackingNumber}\n\nThis would open the carrier's tracking page in a real application.`);
+            
+            // Example URL patterns (commented out for demo)
+            // window.open(`https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`, '_blank');
+            // window.open(`https://www.ups.com/track?tracknum=${trackingNumber}`, '_blank');
+            // window.open(`https://www.dhl.com/en/express/tracking.html?AWB=${trackingNumber}`, '_blank');
+        }
+
+        // Edit shipment
+        function editShipment(shipmentId) {
+            const shipment = shipments.find(s => s.id === shipmentId);
+            if (!shipment) return;
+            
+            alert(`Editing shipment: ${shipmentId}\n\nIn a real application, this would open an edit form.`);
+            // In a real app, you would populate a form with the shipment data
+        }
+
+        // Delete shipment
+        function deleteShipment(shipmentId) {
+            if (confirm(`Are you sure you want to delete shipment ${shipmentId}? This action cannot be undone.`)) {
+                const index = shipments.findIndex(s => s.id === shipmentId);
+                if (index !== -1) {
+                    shipments.splice(index, 1);
+                    renderShipmentsTable(shipments);
+                    updateStatistics();
+                    alert(`Shipment ${shipmentId} deleted successfully.`);
+                }
+            }
+        }
+
+        // Create new shipment
+        function createShipment() {
+            // Get form values
+            const orderSelect = document.getElementById('createOrderId');
+            const orderId = orderSelect.value;
+            
+            if (!orderId) {
+                alert('Please select an order');
+                return;
+            }
+            
+            const carrier = document.getElementById('createCarrier').value;
+            const service = document.getElementById('createService').value;
+            const priority = document.getElementById('createPriority').value;
+            const address = document.getElementById('createAddress').value;
+            const city = document.getElementById('createCity').value;
+            const state = document.getElementById('createState').value;
+            const zip = document.getElementById('createZip').value;
+            
+            // Derive customer from order selection
+            const orderText = orderSelect.options[orderSelect.selectedIndex].text;
+            const customer = orderText.split(' - ')[1] || "New Customer";
+            
+            // Construct destination
+            const destination = `${address}, ${city}, ${state} ${zip}`;
+
+            // Generate a new shipment
+            const newShipment = {
+                id: `SHIP-${nextShipmentId++}`,
+                tracking: `1Z999XX${Math.floor(Math.random() * 1000000000).toString().padStart(10, '0')}`,
+                customer: customer,
+                orderId: orderId,
+                destination: destination || "123 New St, City, ST 12345",
+                status: "Pending",
+                carrier: carrier,
+                service: service,
+                priority: priority,
+                shippedDate: "",
+                estDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +7 days
+                actualDelivery: "",
+                weight: (Math.random() * 10 + 1).toFixed(1) + " kg",
+                dimensions: "30×20×15 cm",
+                cost: "$" + (Math.random() * 50 + 10).toFixed(2),
+                notes: "New shipment created"
+            };
+            
+            shipments.unshift(newShipment);
+            renderShipmentsTable(shipments);
+            updateStatistics();
+            closeCreateModal();
+            
+            alert(`New shipment created:\n\nID: ${newShipment.id}\nTracking: ${newShipment.tracking}\nStatus: ${newShipment.status}`);
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const today = new Date().toISOString().split('T')[0];
+            const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+
+            // Today's Shipments (using shippedDate)
+            const todayCount = shipments.filter(s => s.shippedDate === today).length;
+            
+            // On-Time Delivery Rate
+            const delivered = shipments.filter(s => s.status === 'Delivered');
+            const onTimeCount = delivered.filter(s => s.actualDelivery && s.actualDelivery <= s.estDelivery).length;
+            const onTimeRate = delivered.length > 0 ? Math.round((onTimeCount / delivered.length) * 100) : 100;
+
+            // In Transit
+            const inTransitCount = shipments.filter(s => ['In Transit', 'Out for Delivery'].includes(s.status)).length;
+            
+            // Delayed
+            const delayedCount = shipments.filter(s => s.status === 'Delayed').length;
+            
+            // Total This Month
+            const monthCount = shipments.filter(s => (s.shippedDate && s.shippedDate.startsWith(currentMonth))).length;
+
+            document.getElementById('statToday').textContent = todayCount;
+            document.getElementById('statOnTime').textContent = onTimeRate + '%';
+            document.getElementById('statInTransit').textContent = inTransitCount;
+            document.getElementById('statDelayed').textContent = delayedCount;
+            document.getElementById('statTotal').textContent = monthCount;
+        }
+
+        // Print shipping label
+        function printLabel(shipmentId) {
+            alert(`Printing shipping label for ${shipmentId}`);
+            // In a real app, this would generate and print a shipping label
+        }
+
+        // Modal functions
+        function showCreateModal() {
+            document.getElementById('createModal').style.display = 'flex';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('shipmentModal').style.display = 'none';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const shipmentModal = document.getElementById('shipmentModal');
+            const createModal = document.getElementById('createModal');
+            
+            if (event.target === shipmentModal) {
+                closeModal();
+            }
+            if (event.target === createModal) {
+                closeCreateModal();
+            }
+        };
+    </script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>

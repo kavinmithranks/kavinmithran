@@ -1,0 +1,981 @@
+ex/
+└── site/
+    ├── about.html
+    ├── help.html
+    ├── index.html
+    ├── orders.html
+    ├── reports.html
+    ├── setting.html
+    └── shpiments.html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiXpress - Order Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Section */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        /* Order Stats Cards */
+        .order-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid;
+        }
+
+        .stat-card.pending {
+            border-color: #f59e0b;
+        }
+
+        .stat-card.processing {
+            border-color: #3b82f6;
+        }
+
+        .stat-card.shipped {
+            border-color: #8b5cf6;
+        }
+
+        .stat-card.delivered {
+            border-color: #10b981;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.2rem;
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .trend {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Create Order Form */
+        .create-order-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .create-order-section h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Orders List Section */
+        .orders-list-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #1e293b;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-controls select,
+        .filter-controls input {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* Orders Table */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table thead {
+            background-color: #f1f5f9;
+        }
+
+        .orders-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .orders-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .orders-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-shipped {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .status-delivered {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: opacity 0.3s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .btn-view {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* Order Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            margin-bottom: 1rem;
+        }
+
+        .detail-item label {
+            display: block;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .page-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            📦 LogiXpress
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="orders.html" class="active">Orders</a>
+            <a href="customers.html">Customers</a>
+            <a href="reports.html">Reports</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Order Management</h1>
+            <button class="btn-create" onclick="showCreateForm()">+ New Order</button>
+        </div>
+
+        <!-- Order Statistics -->
+        <div class="order-stats">
+            <div class="stat-card pending">
+                <h3>Pending Orders</h3>
+                <div class="value">24</div>
+                <div class="trend">+3 today</div>
+            </div>
+            <div class="stat-card processing">
+                <h3>Processing</h3>
+                <div class="value">18</div>
+                <div class="trend">+2 today</div>
+            </div>
+            <div class="stat-card shipped">
+                <h3>Shipped</h3>
+                <div class="value">156</div>
+                <div class="trend">12 today</div>
+            </div>
+            <div class="stat-card delivered">
+                <h3>Delivered</h3>
+                <div class="value">1,049</div>
+                <div class="trend">+89 this week</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Create Order Form -->
+            <section class="create-order-section">
+                <h2>Create New Order</h2>
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name *</label>
+                        <input type="text" id="customerName" placeholder="Enter customer name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerEmail">Email *</label>
+                            <input type="email" id="customerEmail" placeholder="customer@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerPhone">Phone</label>
+                            <input type="tel" id="customerPhone" placeholder="(123) 456-7890">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product">Product *</label>
+                        <select id="product" required>
+                            <option value="">Select a product</option>
+                            <option value="Laptop Pro X1">Laptop Pro X1</option>
+                            <option value="Wireless Headphones">Wireless Headphones</option>
+                            <option value="Smart Watch Series 5">Smart Watch Series 5</option>
+                            <option value="4K Monitor 27"">4K Monitor 27"</option>
+                            <option value="Gaming Keyboard">Gaming Keyboard</option>
+                            <option value="Portable Speaker">Portable Speaker</option>
+                            <option value="Tablet Air 3">Tablet Air 3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quantity">Quantity *</label>
+                            <input type="number" id="quantity" min="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="unitPrice">Unit Price ($)</label>
+                            <input type="number" id="unitPrice" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Order Status *</label>
+                        <select id="status" required>
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Order Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Special instructions, shipping preferences, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-create">Create Order</button>
+                </form>
+            </section>
+
+            <!-- Orders List -->
+            <section class="orders-list-section">
+                <div class="section-header">
+                    <h2>Recent Orders</h2>
+                    <div class="filter-controls">
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                        <input type="text" id="searchOrders" placeholder="Search orders...">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="page-btn">«</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">»</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="close-modal" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalContent">
+                <!-- Dynamic content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 LogiXpress Order Management System. All rights reserved.</p>
+        <p>Version 2.1.0 | Last updated: February 2026</p>
+    </footer>
+
+    <script>
+        // Sample orders data
+        let orders = [
+            { id: "ORD-1001", customer: "John Smith", email: "john@email.com", phone: "(555) 123-4567", product: "Laptop Pro X1", quantity: 1, price: 1299.99, status: "Shipped", date: "2026-02-02", notes: "Express shipping requested" },
+            { id: "ORD-1002", customer: "Emma Johnson", email: "emma@email.com", phone: "(555) 234-5678", product: "Wireless Headphones", quantity: 3, price: 199.99, status: "Pending", date: "2026-02-03", notes: "Gift wrapping required" },
+            { id: "ORD-1003", customer: "Carlos Ruiz", email: "carlos@email.com", phone: "(555) 345-6789", product: "Smart Watch Series 5", quantity: 1, price: 349.99, status: "Delivered", date: "2026-02-01", notes: "" },
+            { id: "ORD-1004", customer: "Maya Patel", email: "maya@email.com", phone: "(555) 456-7890", product: "4K Monitor 27\"", quantity: 2, price: 449.99, status: "Processing", date: "2026-02-03", notes: "Corporate order" },
+            { id: "ORD-1005", customer: "Alex Chen", email: "alex@email.com", phone: "(555) 567-8901", product: "Gaming Keyboard", quantity: 5, price: 89.99, status: "Shipped", date: "2026-02-02", notes: "Bulk order for office" },
+            { id: "ORD-1006", customer: "Sarah Williams", email: "sarah@email.com", phone: "(555) 678-9012", product: "Portable Speaker", quantity: 1, price: 129.99, status: "Delivered", date: "2026-01-31", notes: "" },
+            { id: "ORD-1007", customer: "David Kim", email: "david@email.com", phone: "(555) 789-0123", product: "Tablet Air 3", quantity: 3, price: 599.99, status: "Pending", date: "2026-02-03", notes: "Contact before delivery" },
+            { id: "ORD-1008", customer: "Lisa Brown", email: "lisa@email.com", phone: "(555) 890-1234", product: "Laptop Pro X1", quantity: 1, price: 1299.99, status: "Shipped", date: "2026-02-01", notes: "Priority shipping" }
+        ];
+
+        let nextOrderId = 1009;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrdersTable(orders);
+            setupEventListeners();
+        });
+
+        // Render orders table
+        function renderOrdersTable(ordersToRender) {
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = '';
+            
+            if (ordersToRender.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                            No orders found. Create your first order above!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            ordersToRender.forEach(order => {
+                const row = document.createElement('tr');
+                
+                // Determine status class
+                let statusClass = '';
+                switch(order.status.toLowerCase()) {
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'processing': statusClass = 'status-processing'; break;
+                    case 'shipped': statusClass = 'status-shipped'; break;
+                    case 'delivered': statusClass = 'status-delivered'; break;
+                }
+                
+                // Format date
+                const dateObj = new Date(order.date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                row.innerHTML = `
+                    <td><strong>${order.id}</strong></td>
+                    <td>
+                        <div>${order.customer}</div>
+                        <div style="font-size: 0.85rem; color: #64748b;">${order.email}</div>
+                    </td>
+                    <td>${order.product}</td>
+                    <td>${order.quantity}</td>
+                    <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+                    <td>${formattedDate}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-view" onclick="viewOrder('${order.id}')">View</button>
+                            <button class="btn-action btn-edit" onclick="editOrder('${order.id}')">Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteOrder('${order.id}')">Delete</button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('orderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createNewOrder();
+            });
+            
+            // Filter and search
+            document.getElementById('statusFilter').addEventListener('change', filterOrders);
+            document.getElementById('searchOrders').addEventListener('input', filterOrders);
+        }
+
+        // Create new order
+        function createNewOrder() {
+            const customerName = document.getElementById('customerName').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const product = document.getElementById('product').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
+            const status = document.getElementById('status').value;
+            const notes = document.getElementById('notes').value;
+            
+            // Validate required fields
+            if (!customerName || !customerEmail || !product || !quantity) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Create new order object
+            const newOrder = {
+                id: `ORD-${nextOrderId++}`,
+                customer: customerName,
+                email: customerEmail,
+                phone: customerPhone,
+                product: product,
+                quantity: quantity,
+                price: unitPrice,
+                status: status,
+                notes: notes,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            // Add to beginning of orders array
+            orders.unshift(newOrder);
+            
+            // Update the table
+            renderOrdersTable(orders);
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Reset form
+            resetForm();
+            
+            // Show success message
+            alert(`Order ${newOrder.id} created successfully!`);
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('orderForm').reset();
+            document.getElementById('quantity').value = '1';
+            document.getElementById('status').value = 'Pending';
+        }
+
+        // Filter orders
+        function filterOrders() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const searchTerm = document.getElementById('searchOrders').value.toLowerCase();
+            
+            let filteredOrders = orders;
+            
+            // Filter by status
+            if (statusFilter) {
+                filteredOrders = filteredOrders.filter(order => 
+                    order.status.toLowerCase() === statusFilter.toLowerCase()
+                );
+            }
+            
+            // Filter by search term
+            if (searchTerm) {
+                filteredOrders = filteredOrders.filter(order => 
+                    order.id.toLowerCase().includes(searchTerm) ||
+                    order.customer.toLowerCase().includes(searchTerm) ||
+                    order.email.toLowerCase().includes(searchTerm) ||
+                    order.product.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderOrdersTable(filteredOrders);
+        }
+
+        // View order details
+        function viewOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            const modalContent = document.getElementById('modalContent');
+            const total = (order.price * order.quantity).toFixed(2);
+            
+            modalContent.innerHTML = `
+                <div class="order-details">
+                    <div class="detail-item">
+                        <label>Order ID</label>
+                        <div><strong>${order.id}</strong></div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Customer Name</label>
+                        <div>${order.customer}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Email</label>
+                        <div>${order.email}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Phone</label>
+                        <div>${order.phone || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Product</label>
+                        <div>${order.product}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Quantity</label>
+                        <div>${order.quantity}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Unit Price</label>
+                        <div>$${order.price.toFixed(2)}</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Total Amount</label>
+                        <div><strong>$${total}</strong></div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Status</label>
+                        <div><span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Order Date</label>
+                        <div>${new Date(order.date).toLocaleDateString('en-US', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        })}</div>
+                    </div>
+                    <div class="detail-item" style="grid-column: 1 / -1;">
+                        <label>Notes</label>
+                        <div style="background: #f8fafc; padding: 1rem; border-radius: 6px;">${order.notes || 'No notes provided.'}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        // Edit order
+        function editOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            // Populate form with order data
+            document.getElementById('customerName').value = order.customer;
+            document.getElementById('customerEmail').value = order.email;
+            document.getElementById('customerPhone').value = order.phone || '';
+            document.getElementById('product').value = order.product;
+            document.getElementById('quantity').value = order.quantity;
+            document.getElementById('unitPrice').value = order.price || '';
+            document.getElementById('status').value = order.status;
+            document.getElementById('notes').value = order.notes || '';
+            
+            // Remove the order (it will be re-added when form is submitted)
+            const index = orders.findIndex(o => o.id === orderId);
+            if (index !== -1) {
+                orders.splice(index, 1);
+                renderOrdersTable(orders);
+                updateStatistics();
+            }
+            
+            // Scroll to form
+            document.querySelector('.create-order-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete order
+        function deleteOrder(orderId) {
+            if (confirm(`Are you sure you want to delete order ${orderId}?`)) {
+                const index = orders.findIndex(o => o.id === orderId);
+                if (index !== -1) {
+                    orders.splice(index, 1);
+                    renderOrdersTable(orders);
+                    updateStatistics();
+                    alert(`Order ${orderId} deleted successfully.`);
+                }
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const pendingCount = orders.filter(o => o.status === 'Pending').length;
+            const processingCount = orders.filter(o => o.status === 'Processing').length;
+            const shippedCount = orders.filter(o => o.status === 'Shipped').length;
+            const deliveredCount = orders.filter(o => o.status === 'Delivered').length;
+            
+            // Update UI (you would update the elements with these counts)
+            console.log(`Pending: ${pendingCount}, Processing: ${processingCount}, Shipped: ${shippedCount}, Delivered: ${deliveredCount}`);
+        }
+
+        // Show create form (scroll to it)
+        function showCreateForm() {
+            document.querySelector('.create-order-section').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('customerName').focus();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('orderModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+
+    <!-- Active nav helper -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const current = (window.location.pathname.split('/').pop() || 'index.html');
+      document.querySelectorAll('.nav-links a, .nav-link').forEach(a => {
+        const href = (a.getAttribute('href') || '').split('/').pop();
+        if (href === current || (current === 'index.html' && href === 'about.html')) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    });
+    </script>
+</body>
+</html>
